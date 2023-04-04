@@ -1,0 +1,74 @@
+% LaTeX Generic essay template
+% Copyright (C) 2017  Shen Zhou Hong <shen@hong.io>
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+% For more information on documentclass configuration, see:
+% https://texblog.org/2013/02/13/latex-documentclass-options-illustrated/#formula
+\documentclass[
+  10pt,
+  a4paper,
+  protrudelabels,
+  onehalfspacing,
+  extraligatures,
+  titlepage,
+  english,
+  widemargins
+]{humanize}
+
+\input{configuration.tex}
+
+% Document Title, Author, and Date
+\title{
+  \LARGE
+  \textbf{Assessing Fracture Healing \\ with Artificial Intelligence:} \\
+  Using Transfer Learning to Predict the \\
+  \emph{Radiographic Union Score for Tibial Fractures}, \\
+  in the Radiography of High-Energy Trauma 
+}
+\author{
+  Shen Zhou Hong \and Goldsmiths, UoL
+}
+\date{April 4th, 2023}
+
+% Document Begins
+\begin{document}
+\maketitle
+\tableofcontents
+
+\include{sections/introduction.tex} %  598 / ~300 words, +298
+
+\include{sections/background.tex}   % 1827 /~1000 words, +827
+
+% TODO: Needs Updating
+\include{sections/methodology.tex}  %   80 / ~300 words, -220
+
+% TODO: Needs Updating
+\include{sections/resources.tex}    %   63 / ~150 words  - 87
+
+% Only necessary for the proprosal 
+% \include{sections/outcomes.tex}     %  214 / ~250 words  - 36
+
+% TODO: Needs Updating
+% \include{sections/implementation.tex}%   up to 3000 words
+
+\include{sections/bibliography.tex}
+
+\appendix
+
+\include{appendices/appendix.tex}
+
+\include{appendices/presentation.tex}
+
+\end{document}
