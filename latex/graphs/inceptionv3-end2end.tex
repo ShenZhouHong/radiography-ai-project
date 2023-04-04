@@ -1,0 +1,104 @@
+% Template for a TiKZ/PGFPlot Graph
+\begin{figure}[H]
+    \begin{tikzpicture}[trim axis left]
+        % All the graphing elements are inside axis environment
+        \begin{axis}[
+            width=\textwidth,
+            height=7cm,
+            scale only axis,
+            title={InceptionV3 End-to-End Trained Initial Evaluation ($k = 10 $)},
+            xlabel={Epochs},
+            ylabel={AUROC},
+            xmin=1, xmax=50,
+            ymin=0.5, ymax=1,
+            grid=both,
+            minor tick num=1,
+            grid style=dotted,
+            legend pos=north east,
+            x tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=0
+            },
+            y tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=2
+            },
+        ]
+            % First graph the validation AUROCs
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/initial-evaluations/inceptionv3_end2end_valid_auc.csv};
+            \addlegendentry{Avg. Validation AUROC}
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/initial-evaluations/inceptionv3_end2end_train_auc.csv};
+            \addlegendentry{Avg. Training AUROC}
+
+            % Highest average validation AUROC
+            \addplot[
+              color=blue,
+              no marks,
+              dotted,
+              ultra thick,
+              domain=0:50
+            ]
+            {
+              0.692
+            };
+            \addlegendentry{$y = 0.692$}
+
+            \foreach \n in {1,...,10} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/initial-evaluations/inceptionv3_end2end_valid_auc.csv};
+            }
+
+            \foreach \n in {1,...,10} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/initial-evaluations/inceptionv3_end2end_train_auc.csv};
+            }
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{InceptionV3 Model Trained on Study Data.}
+    \label{graph:inceptionv3-end2end}
+  \end{figure}
+  

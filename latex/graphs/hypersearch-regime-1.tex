@@ -1,0 +1,65 @@
+\begin{figure}[H]
+    \begin{tikzpicture}[trim axis left]
+        % All the graphing elements are inside axis environment
+        \begin{axis}[
+            width=\textwidth,
+            height=\textwidth,
+            scale only axis,
+            title={Regime I Hyperparameter Search Results (Trials = $108$, $k = 6$)},
+            xlabel={Batch Size},
+            ylabel={Dropout Rate},
+            xmin=16, xmax=2048,
+            ymin=0, ymax=0.5,
+            grid=both,
+            minor tick num=1,
+            grid style=dotted,
+            legend pos=north east,
+            colormap name=viridis,
+            point meta min=0.74,
+            point meta max=0.82,
+            colorbar,
+            colormap/viridis,
+            colorbar horizontal=true,
+            colorbar style={
+                xlabel={Max Valid. AUC},
+                x tick label style={
+                    /pgf/number format/fixed,
+                    /pgf/number format/fixed zerofill,
+                    /pgf/number format/precision=2,
+                },
+            },
+            x tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=0
+            },
+            y tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=2
+            },
+        ]
+            % CSV Data Table Plot Example
+            \addplot[
+                scatter,
+                only marks,
+                scatter src=explicit,
+                scatter/use mapped color={
+                    draw=mapped color,fill=mapped color
+                },
+                mark=*,
+            ]
+            table[
+              col sep=comma,
+              header=true,
+              x=batch_size,
+              y=dropout_rate,
+              meta=max_val_auc
+            ]{data/hypersearch/regime-1.csv};
+            \addlegendentry{Hyperparameter Trial}
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Results for the Hyperparameter Search Regime I}
+    \label{graph:regime_I}
+\end{figure}

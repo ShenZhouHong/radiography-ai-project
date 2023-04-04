@@ -1,0 +1,530 @@
+% Template for a TiKZ/PGFPlot Grouped Graph
+% See https://tex.stackexchange.com/questions/440466/pgfplots-trim-axis-of-groupplots
+% Regarding trimming
+% See https://tikz.dev/pgfplots/libs-groupplots for general usage
+% For some reason \foreach does not expand in filenames, pardon the long file.
+
+\begin{figure}[H]
+    \begin{tikzpicture}[trim axis group left]
+        \begin{groupplot}[
+            group style = {
+                group size=3 by 3,
+                horizontal sep = 15pt,
+                vertical sep = 15pt,
+                xlabels at=edge bottom,
+                ylabels at=edge left,
+                xticklabels at=edge bottom,
+                yticklabels at=edge left,
+            },
+            width=0.333\textwidth-10pt,
+            height=0.333\textwidth-10pt,
+            scale only axis,
+            xlabel={Epochs},
+            ylabel={AUROC},
+            xmin=1, xmax=20,
+            ymin=0.5, ymax=1,
+            grid=both,
+            minor tick num=1,
+            grid style=dotted,
+            x tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=0
+            },
+            y tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=2
+            },
+        ]
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/1_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/1_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/1_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/1_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/2_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/2_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/2_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/2_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/3_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/3_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/3_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/3_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/4_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/4_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/4_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/4_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/5_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/5_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/5_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/5_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/6_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/6_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/6_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/6_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/7_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/7_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/7_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/7_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/8_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/8_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/8_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/8_train_auc.csv};
+            }
+            % New Plot Group Begins Here
+            \nextgroupplot
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/9_valid_auc.csv};
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/hypersearch/regime-1-examples/9_train_auc.csv};
+
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/9_valid_auc.csv};
+            }
+            \foreach \n in {1,...,6} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/hypersearch/regime-1-examples/9_train_auc.csv};
+            }
+        \end{groupplot}
+    \end{tikzpicture}
+    \caption{Examples of model performance from hyperparameter regime I search.}
+    \label{graph:regime_I_examples}
+\end{figure}
