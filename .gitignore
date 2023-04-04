@@ -227,3 +227,4 @@ TSWLatexianTemp*
 *.xmpi
 
 .vscode/
+__pycache__/

@@ -1,0 +1,4 @@
+# Do not commit the datasets to the project repository (for now)
+ds_test/
+ds_train/
+ds_valid/

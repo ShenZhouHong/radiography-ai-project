@@ -8,13 +8,13 @@ RNG_SEED: int = 1337
 
 class TransferLearningModel(tf.keras.Model):
     """
-    Transfer Learning Model for Regime I and II
+    Transfer Learning Model.
     """
     def __init__(
             self,
             name=None,
             weights: Literal['imagenet', 'radimagenet.h5'] = 'imagenet',
-            dropout_rate: float = 0.2,
+            dropout_rate: float = 0.0,
             **kwargs
         ):
         super().__init__(**kwargs)

@@ -297,28 +297,35 @@ def k_fold_dataset(ds: tf.data.Dataset, k: int = 10) -> list[tuple[tf.data.Datas
 def cross_validate(
         ModelClass: tf.keras.Model,
         ds_train_and_valid: tf.data.Dataset,
-        filename: str = "FINAL_k_fold_history.pickle",
         epochs: int = 50,
         batch_size: int = 128,
-        dropout_rate: float = 0.0,
+        save_history: bool = True,
+        history_filename: str = "model_kfold_history.pickle",
+        checkpoint: bool = False,
+        checkpoint_name: str = "model",
         k: int = 10,
-        optimizer_kwargs: dict[str, any] = {"learning_rate": 0.001, "epsilon": 1e-7}
+        optimizer_kwargs: dict[str, any] = {"learning_rate": 0.001, "epsilon": 1e-7},
+        model_kwargs: dict[str, any] = {"dropout_rate": 0.0, "weights": "imagenet"}
     ) -> list[tf.keras.callbacks.History]:
     """
-    Performs K-fold cross-validation on a given dataset using a specified deep learning model.
+    Performs k-fold cross-validation on a given dataset using a specified deep learning model.
 
     Args:
-        ModelClass (tf.keras.Model): The class of the model to be trained and evaluated.
-        ds_train_and_valid (tf.data.Dataset): The input dataset to be used for training and validation.
-        metrics (list[tf.metrics.Metric]): A list of metrics to be evaluated during training.
-        loss (tf.keras.losses.Loss, optional): The loss function to be used for training. Defaults to BinaryCrossentropy.
-        optimizer (tf.keras.optimizers.Optimizer, optional): The optimizer to be used for training. Defaults to Adam().
-        epochs (int, optional): The number of epochs to train for. Defaults to 50.
-        batch_size (int, optional): The batch size to use during training. Defaults to 128.
-        k (int, optional): The number of folds to use for K-fold cross-validation. Defaults to 10.
+        ModelClass (tf.keras.Model): The model class to be used for cross-validation.
+        ds_train_and_valid (tf.data.Dataset): The training and validation dataset for cross-validation.
+        epochs (int, optional): The number of epochs for training the model. Defaults to 50.
+        batch_size (int, optional): The batch size for training the model. Defaults to 128.
+        dropout_rate (float, optional): The dropout rate for the model. Defaults to 0.0.
+        save_history (bool, optional): Whether or not to save the training history. Defaults to True.
+        history_filename (str, optional): The filename to use for saving the training history. Defaults to "model_kfold_history.pickle".
+        checkpoint (bool, optional): Whether or not to use a checkpoint callback. Defaults to False.
+        checkpoint_name (str, optional): The name to use for the checkpoint. Defaults to "model".
+        k (int, optional): The number of folds for cross-validation. Defaults to 10.
+        optimizer_kwargs (dict[str, any], optional): The optimizer keyword arguments to use. Defaults to {"learning_rate": 0.001, "epsilon": 1e-7}.
+        model_kwargs (dict[str, any], optional): The model keyword arguments to use. Defaults to {"dropout_rate": 0.0, "weights": "imagenet"}.
 
     Returns:
-        list[tf.keras.callbacks.History]: A list of `tf.keras.callbacks.History` objects containing training metrics and loss values for each fold.
+        list[tf.keras.callbacks.History]: The training history for each fold of the cross-validation.
     """
 
     history_list: list[tf.keras.callbacks.History] = []
@@ -331,17 +338,19 @@ def cross_validate(
         print(f"Training fold {i + 1}/{k}: ds_train: {ds_train_size}, ds_valid: {ds_valid_size}")
 
         tf.keras.backend.clear_session()
-        model = ModelClass(dropout_rate=dropout_rate)
+        model = ModelClass(**model_kwargs)
 
-        model_callback_checkpoint = tf.keras.callbacks.ModelCheckpoint(
-            f"FINAL_MODEL_CHECKPOINT_kfold_{i + 1}.model",
-            monitor="val_auc",
-            verbose=1,
-            save_best_only=True,
-            mode="max",
-            save_freq="epoch"
-        )
-
+        if checkpoint:
+            callbacks: list[tf.keras.callbacks.Callback] = [tf.keras.callbacks.ModelCheckpoint(
+                f"{checkpoint_name}_kfold_{i + 1}",
+                monitor="val_auc",
+                save_best_only=True,
+                mode="max",
+                save_freq="epoch",
+                verbose=0
+            )]
+        else:
+            callbacks: list[tf.keras.callbacks.Callback] = []
         
         model.compile(
             optimizer=tf.keras.optimizers.Adam(**optimizer_kwargs),
@@ -360,13 +369,13 @@ def cross_validate(
             epochs=epochs,
             batch_size=batch_size,
             verbose=0,
-            callbacks=[model_callback_checkpoint]
+            callbacks=callbacks
         )
         
         history_list.append(history.history)
-        # Save results in case hyperparameter search gets interrupted
-        with open(filename, 'wb') as file:
-            pickle.dump(history_list, file, protocol=pickle.HIGHEST_PROTOCOL)
+        if save_history:
+            with open(history_filename, 'wb') as file:
+                pickle.dump(history_list, file, protocol=pickle.HIGHEST_PROTOCOL)
 
     print(f"K-Fold Cross-Validation Completed on {i +1} Folds.")
     return history_list
