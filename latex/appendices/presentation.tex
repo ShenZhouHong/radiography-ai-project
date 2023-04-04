@@ -1,0 +1,40 @@
+% Make sure that the header and footer overhang into the marginnotes area
+% We must call this every time we update the page geometry, otherwise the
+% values WILL be stale!
+\setlength{\headwidth}{\textwidth}
+{
+\setlength{\parindent}{0pt}
+
+\section{Project Proposal Presentation}
+Project proposal presentation given on 2022-01-11, at the Johns Hopkins University, East Baltimore Campus.
+
+% First include the title slide in a larger than usual format for a preview
+\includegraphics[
+page=1,
+width=\textwidth,
+angle=0,
+right
+]{media/metrc-ai-presentation.pdf}
+
+% Include the remaining slides as minipages of groups of two
+\foreach \n in {2,4,6,8,10,12,14,16,18,20}{
+    \begin{minipage}{.49\textwidth}%
+        \includegraphics[
+            page=\n,
+            width=\textwidth,
+            angle=0,
+            right
+        ]{media/metrc-ai-presentation.pdf}
+    \end{minipage}%
+    \begin{minipage}{.49\textwidth}%
+        \includegraphics[
+            page=\the\numexpr\n+1\relax,
+            width=\textwidth,
+            angle=0,
+            right
+        ]{media/metrc-ai-presentation.pdf}
+    \end{minipage}
+
+    \vfill
+}
+}

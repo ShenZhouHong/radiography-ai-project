@@ -1,0 +1,61 @@
+\chapter{Outcomes and Deliverables}
+
+\section{Chapter Structure}
+
+It is the intention of this project to deliver a report with the following chapters:
+
+\begin{itemize}
+    \item Abstract
+    \item Introduction
+    \item Literature Review
+    \item Methodology
+    \item Research Results
+    \item Conclusion
+    \item Bibliography 
+    \item Appendices
+\end{itemize}
+
+\section{Software and Git Repository}
+
+The project aims to deliver the following software artefacts:
+
+\begin{enumerate}
+    \item A documented Jupyter notebook report, containing model information.
+    \item The final fine-tuned model with weights and parameters.\footnote{Due to HIPAA (Health Insurance Portability and Accountability Act) and regulatory requirements, it may not be possible to deliver the original radiographic datasets.}
+    \item A standalone Jupyter notebook or Python script for conducting inference.
+\end{enumerate}
+
+\noindent
+Within the best of our ability, all project-related software and code will be released under an appropriate open source license, such as the GPLv3. A Git repository containing the project code will be available. 
+
+\section{Timeline}
+This project will endeavour to conform to the following timeline.
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{@{}lX@{}}
+    \toprule
+    \textbf{Date}                     & \textbf{Tasks}     \\ \midrule
+    % \DTMdisplaydate{2022}{12}{16}{-1} &  \\
+    \DTMdisplaydate{2022}{12}{05}{-1} & Selection of base models for transfer learning \\
+    \DTMdisplaydate{2022}{12}{12}{-1} & Initial evaluation of base models on METRC dataset \\
+    \DTMdisplaydate{2022}{12}{16}{-1} & \textbf{Deadline:} Design Specification \\
+    \DTMdisplaydate{2023}{01}{02}{-1} & Pre-processing of METRC Radiographs \\
+    \DTMdisplaydate{2023}{01}{00}{-1} & Training and fine-tuning of models on METRC Radiographs \\
+    \DTMdisplaydate{2023}{02}{27}{-1} & Further time dedicated to model development. \\
+    \DTMdisplaydate{2023}{03}{06}{-1} & Complete model evaluation, AUROC, etc. \\
+    \DTMdisplaydate{2023}{03}{31}{-1} & \textbf{Deadline:} Implementation and Analysis\\
+    \DTMdisplaydate{2023}{04}{10}{-1} & Work on Report, Evaluation, Further Studies. \\
+    \DTMdisplaydate{2023}{04}{24}{-1} & Final cleaning and documentation of project code. \\
+    \DTMdisplaydate{2023}{05}{02}{-1} & \textbf{Deadline:} Poster Presentation \\
+    \DTMdisplaydate{2023}{05}{12}{-1} & \textbf{Deadline:} Evaluation and Executive Summary \\ \bottomrule
+    \end{tabularx}%
+    \caption{Proposed Project Timeline.}\label{tab:timeline}
+\end{table}
+
+
+\section{Potential Risks and Contingency Planning}
+
+Due to the scope of this project, we left ample room in the timeline in case of unexpected difficulties. Although the goal of predicting RUST scores from radiographs has not been attempted before, the task of using transfer learning on radiographic data is well documented in literature, and has resulted in models with near-human performance using data sets of similar magnitudes \autocite{Kim2018}. Hence we are confident of the goals that the project has set.
+
+For our minimal viable product, we aim to deliver a model that is capable of generating heat maps and predicting RUST Scores. Only once we validate the architecture, will we aim for achieving higher AUROC scores.

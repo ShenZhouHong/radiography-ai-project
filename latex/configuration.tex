@@ -38,8 +38,8 @@
 % \usepackage{tkz-euclide}            % Used for planar geometry (Euclidean)
 
 % Scientific graphics and plotting
-% \usepackage{tikz}                   % Used for graphical illustrations.
-% \usepackage{pgfplots}               % Used for scientific graphs and charts
+\usepackage{tikz}                   % Used for graphical illustrations.
+\usepackage{pgfplots}               % Used for scientific graphs and charts
 
 % Packages for typesetting code and pseudocode
 % In order to use minted, you must edit your makefile to -use-shell-escape!
@@ -49,15 +49,17 @@
 
 % Optional LaTeX packages for additional functionality
 % \usepackage[noframe]{showframe}     % Debug option to show margin frames.
-% \usepackage{float}                  % For arranging floats
-% \usepackage{graphicx}               % Required for embedding images
-% \usepackage{booktabs}               % For prettier tables
-% \usepackage{tabularx}               % Auto scale tables to \textwidth
+\usepackage{float}                  % For arranging floats
+\usepackage{graphicx}               % Required for embedding images
+\usepackage[export]{adjustbox}
+\usepackage{booktabs}               % For prettier tables
+\usepackage{tabularx}               % Auto scale tables to \textwidth
+\usepackage{datetime2}
 % \usepackage{geometry}               % Sets more "reasonable" margin-sizes
 % \usepackage{xeCJK}                  % For typesetting CJK characters
 % \usepackage[l2tabu, orthodox]{nag}  % Verbose warnings for typesetting
 
-% % Custom geometry for larger margin notes with assymetric body layout
+% % Custom geometry for larger margin notes with asymmetric body layout
 % \newgeometry{
 %   % Preserve the LaTeX default \textwidth and \textheight
 %   textwidth =\textwidth,
@@ -76,14 +78,34 @@
 % }
 %
 % % Make sure that the header and footer overhang into the marginnotes area
-% % We must call this everytime we update the page geometry, otherwise the
+% % We must call this every time we update the page geometry, otherwise the
 % % values WILL be stale!
 % \setlength{\headwidth}{\textwidth}
 % \addtolength{\headwidth}{\marginparsep}
 % \addtolength{\headwidth}{\marginparwidth}
 
 % The biblatex package should go last!
-% \usepackage[style=ieee]{biblatex} 
-% \addbibresource{citations.bib}
+
+
+\usepackage[style=ieee, backend=biber]{biblatex} % Nice MLA bibliography
+\addbibresource{bibliography.bib} % Biblatex. See includes/formatting.tex
+\SetCiteCommand{\autocite} % For use with csquotes, where you can do:
+% \textcquote[175]{key}{quoted text here}
+
+% Custom IEEE biblatex environment with protruded label numbers
+\defbibenvironment{ieee-protrusion}
+  {\list{}
+     {\printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}}}
+     {\setlength{\labelwidth}{\labelnumberwidth}%
+      \setlength{\leftmargin}{-\labelsep}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{0.5em}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}%
+      \renewcommand*{\makelabel}[1]{\hss##1}}
+  {\endlist}
+  {\item}
 
 % Any additional user configuration goes below

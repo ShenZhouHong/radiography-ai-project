@@ -1,0 +1,11 @@
+% Update page geometry for the appendices, so that we have more room
+\newgeometry{
+    textwidth=0.8\paperwidth,
+    textheight=0.8\paperheight,
+}
+% Make sure that the header and footer overhang into the marginnotes area
+% We must call this every time we update the page geometry, otherwise the
+% values WILL be stale!
+\setlength{\headwidth}{\textwidth}
+
+\chapter{Additional Materials}
