@@ -21,3 +21,7 @@ The notebook files for the hyperparameter search procedure is located within the
 * `regime-2.ipynb`
 
 These correspond to the hyperparameter search regime I, and the hyperparameter search regime II as defined in the methodology and implementation.
+
+## Analysis
+
+These notebooks are used to analyse the hyperparameter search and model data.
