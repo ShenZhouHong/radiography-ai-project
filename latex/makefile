@@ -17,7 +17,7 @@ $(source_name).pdf: $(source_name).tex
 	# This makefile uses lualatex by default. This way, it supports unicode
 	# characters in the latex source files. If you wish to use latex instead of
 	# lualatex, simply remove the -lualatex argument
-	SOURCE_DATE_EPOCH=$(COMMIT_EPOCH) latexmk -pdf -lualatex -use-make $<
+	SOURCE_DATE_EPOCH=$(COMMIT_EPOCH) latexmk -pdf -lualatex -shell-escape -use-make $<
 	sha256sum $(source_name).pdf
 
 	# For syntax highlighting with minted, enable -shell-escape:

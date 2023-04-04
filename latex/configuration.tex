@@ -43,7 +43,7 @@
 
 % Packages for typesetting code and pseudocode
 % In order to use minted, you must edit your makefile to -use-shell-escape!
-% \usepackage{minted}                 % Code highlighting: \begin{minted}{python}
+\usepackage{minted}                 % Code highlighting: \begin{minted}{python}
 % \usepackage{algorithm}              % Float environment for pseudocode
 % \usepackage{algpseudocode}          % Typesetting library for pseudocode
 
@@ -58,6 +58,16 @@
 % \usepackage{geometry}               % Sets more "reasonable" margin-sizes
 % \usepackage{xeCJK}                  % For typesetting CJK characters
 % \usepackage[l2tabu, orthodox]{nag}  % Verbose warnings for typesetting
+
+% We import the inconsolata font and set it as our main mono font, so that our
+% minted code listings will look better.
+\usepackage{inconsolata}
+\setmonofont[
+  AutoFakeSlant,
+  BoldItalicFeatures={FakeSlant},
+  UprightFont = *-Regular,
+  BoldFont = *-Bold
+]{Inconsolatazi4}
 
 % % Custom geometry for larger margin notes with asymmetric body layout
 % \newgeometry{

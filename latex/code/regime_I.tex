@@ -1,0 +1,41 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+    def hyperparameter_search(trials: int, kfolds: int = 6, epochs: int = 20) -> list[dict[str, Union[int, float, list[tf.keras.callbacks.History]]]]:
+        search_results: list[dict[str, any]] = []
+
+        for trial in range(trials):
+            # Randomly pick hyperparameter options
+            rng = np.random.default_rng()
+            batch_size  : int   = rng.integers(16, 2048, endpoint=True)
+            dropout_rate: float = rng.uniform(0.0, 0.5)
+
+            # Conduct K-Fold cross-validation with given hyperparameters
+            results: list[tf.keras.callbacks.History] = cross_validate(
+                TransferLearningModel,
+                ds_train_and_valid,
+                epochs=epochs,
+                batch_size=batch_size,
+                dropout_rate=dropout_rate,
+                k=kfolds
+            )
+
+            search_results.append({
+                "max_val_auc" : calc_kfold_max(results, "val_auc"),
+                "batch_size"  : batch_size,
+                "dropout_rate": dropout_rate,
+                "history_list": k_fold_results
+            })
+
+        return search_results
+    \end{minted}
+\caption{Hyperparameter Search Implementation}\label{listing:hyperparam-search}
+\end{listing}

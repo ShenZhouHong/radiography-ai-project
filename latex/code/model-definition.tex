@@ -1,0 +1,49 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+    class TransferLearningModel(tf.keras.Model):
+        def __init__(self, dropout_rate: float, **kwargs):
+            super().__init__(**kwargs)
+
+            self.input_layer: tf.Tensor = layers.InputLayer(input_shape=(299, 299, 3))
+            self.data_augmentation: tf.keras.Sequential = tf.keras.Sequential([
+                layers.RandomFlip(seed=RNG_SEED),
+            ])
+
+            self.inceptionv3: tf.keras.Model = tf.keras.applications.InceptionV3(
+                include_top=False,
+                weights='imagenet'
+            )
+            self.inceptionv3.trainable = False
+
+            self.classifier: tf.keras.Sequential = tf.keras.Sequential([
+                layers.GlobalMaxPooling2D(),
+                layers.Dense(1024, activation='relu'),
+                layers.Dropout(dropout_rate),
+                layers.Dense( 512, activation='relu'),
+                layers.Dropout(dropout_rate),
+                layers.Dense( 256, activation='relu'),
+                layers.Dropout(dropout_rate),
+                layers.Dense(  18, activation='sigmoid')
+            ])
+
+            self.model: tf.keras.Sequential = tf.keras.Sequential([
+                self.input_layer,
+                self.data_augmentation,
+                self.inceptionv3,
+                self.classifier
+            ])
+
+        def call(self, inputs):
+            return self.model(inputs)
+    \end{minted}
+\caption{Sharding dataset for K-Fold Cross Validation}\label{listing:sharding}
+\end{listing}
