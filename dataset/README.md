@@ -1,6 +1,6 @@
 # RUST-AI Radiography Project Dataset
 
-This directory will contain the raw dataset of radiographs with their attached RUST labels. At this moment, the radiograph images are not yet cleared for release.
+This directory will contain the raw dataset of radiographs with their attached RUST labels. At this moment, the radiograph images are not yet cleared for release. Only the labels are currently available.
 
 ## Dataset
 
@@ -10,20 +10,22 @@ The dataset is made available as three `tf.data.Dataset` objects which can be im
 * `ds_valid/`
 * `ds_test/`
 
+These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook.
+
 ### Features
 
-Within the `tf.data.Dataset` objects (i.e. the `ds_*` directories), features are image tensors of shape `(299, 299, 3)`. Further information to be added.
+Within the `tf.data.Dataset` objects (i.e. the `ds_*` directories), features are image tensors of shape `(299, 299, 3)`. The raw image files are located within `raw_images`, with a manifest of filenames available at `filenames.csv`.
+
+Further information to be added once radiographs are cleared for release.
 
 ### Labels
 
 Within the `tf.data.Dataset` objects (i.e. the `ds_*` directories), labels are available as one-hot encoded `tf.Tensor` objects of shape `(18,)`. 
 
-Additionally, the labels are also available as separate one-hot and categorical encoded Pandas dataframes, exported as `.csv` files.
+Additionally, the labels are also available as separate one-hot encoded Pandas dataframes, exported both as Python pickles and as `.csv` files.
 
 * `df_labels-onehot.csv`
-* `df_labels-categorical.csv`
-
-Further information to be added.
+* `df_labels-onehot.pickle`
 
 ## Dataset Manifest
 
