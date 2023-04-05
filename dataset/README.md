@@ -46,5 +46,4 @@ However, this project uses k-Fold validation. Hence, in practice the `ds_train` 
         * K-Fold Cross-Validation, K = 6:
             * Validation Set: 415  (~15% per fold)
             * Training Set  : 2075 (~70%)
-    * Hold-out Validation Set (`ds_valid`): 441 (15%)
     * Hold-out Test Set (`ds_test`):  441 (15%)

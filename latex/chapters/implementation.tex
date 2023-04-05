@@ -26,7 +26,26 @@ The output of every k-fold cross-validation experiment will be a \enquote*{histo
 \noindent
 The above code now completes the prerequisites necessary for data gathering.
 
-\section{Establishing a Baseline}
+\section{Establishing Baseline Performance Targets}
+
+In this section, we will establish the baseline performance targets for our transfer-learning model by training and developing two models which will represent alternative approaches to the problem of multilabel classification on a small dataset. The baseline models will be: a \enquote*{shallow} CNN following LeCun et al.'s classical 1998 LeNet architecture \autocite{lenet1998}, and an InceptionV3 model that is directly end-to-end trained on our radiography dataset. We explicitly choose the above two models as our baseline for comparison, because they each help validate a different aspect of this project: whether a deep neural network is appropriate for the task in the first place, and whether the \emph{technique} of transfer learning is appropriate for our dataset. The second question of whether or not our technique is necessary is why we train a version of our model's architecture directly on the radiography data, in order to obtain a performance measure of using the same model architecture \emph{without} transfer learning. At minimum, our transfer-learning model must achieve a better performance (as measured by it's AUROC score) over the two baseline models.
+
+The performance of the baseline models will be measured as the highest observed \emph{average} AUROC, found using k-fold cross-validation with \(k=10\). The value of \(k=10\) is chosen because the resulting per-fold training and validation splits are no larger than a conventional train, test, and validation split of 70\%, 15\%, 15\%, where:
+
+\begin{itemize}
+    \item Training and Validation Set (\texttt{ds\_train + ds\_valid}): 2490 (85\%):
+    \begin{itemize}
+        \item K-Fold Cross-Validation, $K$ = 10:
+        \begin{itemize}
+            \item Training Set: 2241 (\textasciitilde76\%)
+            \item Validation Set: 249 (\textasciitilde8.5\% per fold)
+        \end{itemize}
+    \end{itemize}
+    \item Hold-out Test Set (\texttt{ds\_test}): 441 (15\%)
+\end{itemize}
+
+\noindent
+Larger \(k\) values yield a more thorough measurement of a model's performance at the cost of additional computational costs, while lower \(k\) values risk lowering the training-validation split ratio until the training set is too small for adequate training.
 
 \subsection{Shallow Convolutional Neural Network}
 
