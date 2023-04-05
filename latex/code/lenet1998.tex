@@ -1,0 +1,45 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+    class LeNet1998(tf.keras.Model):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+
+            self.input_layer: tf.Tensor = layers.InputLayer(input_shape=(299, 299, 3))
+            self.data_augmentation: tf.keras.Sequential = tf.keras.Sequential([
+                layers.RandomFlip(seed=RNG_SEED),
+            ])
+
+            self.lenet1999: tf.keras.Model = tf.keras.Sequential([
+                layers.Conv2D(6, kernel_size=5, strides=1,  activation='tanh', padding='same'),
+                layers.AveragePooling2D(),
+                layers.Conv2D(16, kernel_size=5, strides=1, activation='tanh', padding='valid'),
+                layers.AveragePooling2D(),
+            ])
+
+            self.classifier: tf.keras.Sequential = tf.keras.Sequential([
+                layers.Flatten(),
+                layers.Dense(1024, activation='relu'),
+                layers.Dense(18, activation='sigmoid')
+            ])
+
+            self.model: tf.keras.Sequential = tf.keras.Sequential([
+                    self.input_layer,
+                    self.data_augmentation,
+                    self.lenet1999,
+                    self.classifier
+            ])
+
+        def call(self, inputs):
+            return self.model(inputs)
+    \end{minted}
+\caption{The LeNet 1998 Shallow CNN Model (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/cf8c9e9a1f07849787a98b2fc51df690354bf194/python/initial-evaluation/lenet1998.ipynb}{Github})}\label{listing:lenet1998}
+\end{listing}
