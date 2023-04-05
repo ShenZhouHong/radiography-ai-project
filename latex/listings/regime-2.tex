@@ -1,0 +1,40 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+    def learning_rate_gridsearch(kfolds: int = 6) -> list[dict[str, Union[int, float, list[tf.keras.callbacks.History]]]]:
+        # Grid i: $1.0 \times 10^{-1} \leq$ learning_rate $\leq 1.0 \times 10^{-5}$
+        learning_rates: list = [1 * np.float_power(10, -exp) for exp in range(1, 5)]
+        # Grid j: $1.0 \times 10^{-1} \leq$ epsilon_rate $\leq 1.0 \times 10^{-8}$
+        epsilon_rates : list = [1 * np.float_power(10, -exp) for exp in range(1, 9)]
+
+        search_results: list[dict[str, Union[int, float, list[tf.keras.callbacks.History]]]] = []
+        for i, learning_rate in enumerate(learning_rates):
+            for j, epsilon_rate in enumerate(epsilon_rates):
+                # Conduct K-Fold Experiment
+                k_fold_results: list[tf.keras.callbacks.History] = cross_validate(
+                    TransferLearningModel,
+                    ds_train_and_valid,
+                    k=kfolds,
+                    epochs=EPOCHS,
+                    batch_size=BATCH_SIZE,
+                    model_kwargs={"dropout_rate": DROPOUT_RATE}
+                    optimizer_kwargs={"learning_rate": learning_rate, "epsilon": epsilon_rate},
+                )
+                search_results.append({
+                    "learning_rate": learning_rate,
+                    "epsilon_rate" : epsilon_rate,
+                    "history_list" : k_fold_results
+                })
+
+        return search_results
+    \end{minted}
+\caption{Hyperparameter Search Regime II (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/master/python/hyperparam-search/regime-2.ipynb}{Github})}\label{listing:regime-2}
+\end{listing}
