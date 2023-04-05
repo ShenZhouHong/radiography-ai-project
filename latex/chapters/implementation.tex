@@ -6,6 +6,24 @@ Following the establishment of these two baselines, we will proceed to begin an 
 
 Our model's hyperparameter search procedure consists of two steps, which we term hyperparameter search Regime I and hyperparameter search Regime II. As per our methodology, in Regime I we find the optimal batch size and dropout rate for our model. This is done using a stochastic search process where the hyperparameter space of the model is randomly sampled for \(t\) trials, where each trial consists of a k-fold cross-validation of the model with the selected hyperparameters. Once the optimal combination of batch size and dropout rate are found, we will set these hyperparameters as constant and proceed to the second hyperparameter search regime. In Regime II we find the optimal learning rate and epsilon value \(\epsilon\) for the Adam optimizer, by conducting a grid search over a selection of possible values.
 
+\section{One-Hot Encoding for Labels}
+
+Recall that our model must predict a RUST score from a pair of input radiographs. RUST scores are measures of orthopaedic union (i.e. healing), and ordinarily consist of two subscores for each view (the anterior-posterior and medial-lateral views), quantifying the development of bone calluses and bridging over the fracture line. The score components are as follows:
+
+\input{tables/rust-rubric.tex}
+
+\noindent
+These score components\footnote{Note that the original Whelan et al.\ paper \autocite{Whelan2010} does not include a value for remodelled fractures, however as the METRC dataset includes this category, we will be using the modified RUST variant specific to Johns Hopkins for this study.} are then used to assess the features of a fracture from the anterior, posterior, medial, and lateral cortices:
+
+\input{tables/rust-cortices.tex}
+
+\noindent
+Finally the resulting subscore components are summed in order to yield a RUST score for the fracture as a whole.
+
+% In a clinical context, the values from the rubric are used in a assessment instrument like the following (reproduced from \autocite{Whelan2010}) in order to grade a fracture.
+
+For this study, our model is designed to predict every component subscore. Hence, the label will consist of a 18-value \mintinline{python}{tf.Tensor} with the shape (18,), consisting of 16 one-hot encoded values for the RUST subscores (four for each cortice), as well as two additional one-hot values to represent the view (anterioposterior or medial-lateral).
+
 \section{K-Fold Evaluation}
 
 Before we begin, we must first implement our k-fold cross-validation routine. Since model performance is sensitive to the network's random weight initialisation\footnote{This is particularly true on small datasets with unbalanced classes like ours.} \autocite{Narkhede2022}, our methodology requires k-fold cross-validation to be conducted on every experiment (i.e.\ model run). My implementation of the k-fold cross-validation process consists of two parts: a function which will divide the dataset into \(k\) folds, as well as a function that runs the k-fold cross-validation on the given model. The the \mintinline{python}{k_fold_dataset()} function is given as follows:\footnote{The code listings provided in this document \emph{are for illustration only}. The actual implementation is generally longer, and contains docstrings, debugging instrumentation, file I/O logic, as well as additional function arguments. Every listing will have a link to it's corresponding implementation in the git repository.}
@@ -45,13 +63,22 @@ The performance of the baseline models will be measured as the highest observed 
 \end{itemize}
 
 \noindent
-Larger \(k\) values yield a more thorough measurement of a model's performance at the cost of additional computational costs, while lower \(k\) values risk lowering the training-validation split ratio until the training set is too small for adequate training.
+Larger \(k\) values yield a more thorough measurement of a model's performance at the cost of additional computational costs, while lower \(k\) values risk lowering the training-validation split ratio until the training set is too small for adequate training. For this initial evaluation, as we wish to yield a benchmark for baseline performance, we will be using a \(k\) value of 10. For the hyperparameter search regime, we will be using \(k=6\) in order to lower computational costs.
 
 \subsection{Shallow Convolutional Neural Network}
 
+For the first benchmark, we begin by implementing the shallow convolutional neural network described by LeCun et al in \autocite{lenet1998} in Tensorflow. Our implementation follows the original paper, with a slight modification in the final classifier, in order to output the 18-vector one-hot encoded label predictions. Note the presence of only two convolutional layers --- this is typical for early CNNs of that period.
+
 \input{listings/lenet1998.tex}
 
+\noindent
+We implement our version of the LeNet architecture by subclassing \mintinline{python}{tf.keras.Model} class, which is then passed on to our \mintinline{python}{cross_validate()} function to be evaluated. This entire experiment is conducted within a Jupyter notebook which is made available as a self-contained, reproducible unit within the project repository (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/master/python/initial-evaluation/lenet1998.ipynb}{Github}). Running the experiment yields our first AUROC to performance graph:
+
 \input{graphs/lenet1998.tex}
+
+The bold lines in the chart represent the \emph{average} training (red) and validation (blue) AUROC, as measured after performing k-fold cross-validation on 10 folds (\(k = 10\)). The transparent lines indicate the observed training and validation AUROC per each individual fold: this per-fold performance has been charted in order for us to better observe the consistency of model performance per epoch. Variations in performance per fold is due to a combination of different random starting conditions (due to random weight initialisation at the start of a model's training), as well as variances in floating-point calculations.
+
+What information does our data for the LeNet model tell us? First, we can observe severe overfitting: by epoch 10, performance on the training set asymptomatically approaches $1.0$ (as quantified by AUROC). However, the validation performance remains minimal: generally averaging around $0.60$, with certain instances of the model performing little better than chance ($0.50$). This information indicates that a classical \enquote*{shallow} CNN lacks the representational power to extract the features necessary to perform classification on our dataset. Indeed, it appears that the LeNet model fails to converge at all. This is to be expected: and our experiment yields a minimal baseline AUROC value of $0.608$ that our subsequent models must beat. Likewise, by demonstrating that classical \enquote*{shallow} CNNs are unable to solve our problem, we make the case for using a \enquote*{deep} neural network: in the form of the InceptionV3 architecture, which we will explore in the following section.
 
 \subsection{End-to-End Training with InceptionV3}
 
