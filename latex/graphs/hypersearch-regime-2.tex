@@ -17,7 +17,7 @@
             grid=both,
             minor tick num=1,
             grid style=dotted,
-            enlarge x limits=0.15,
+            enlarge x limits=false,
             enlarge y limits=false,
             mesh/ordering=y varies,
             colormap name=viridis,
@@ -48,6 +48,7 @@
         \addplot [
             matrix plot*,
             mesh/cols=4,
+            mesh/rows=8,
             point meta=explicit
         ] table[
             col sep=comma,

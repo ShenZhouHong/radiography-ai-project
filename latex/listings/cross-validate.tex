@@ -10,12 +10,11 @@
             breakbytoken
         ]{python}
         def cross_validate(ModelClass: tf.keras.Model, ds: tf.data.Dataset, epochs: int = 50, batch_size: int = 128, k: int = 10) -> list[tf.keras.callbacks.History]:
-
             history_list: list[tf.keras.callbacks.History] = []
             train_valid_pairs: list[tf.data.Dataset] = k_fold_dataset(ds, k)
         
             for i, (ds_train, ds_valid) in enumerate(train_valid_pairs):
-        
+                # Reset tensorflow gradient tape
                 tf.keras.backend.clear_session()
                 model = ModelClass()
                 model.compile(

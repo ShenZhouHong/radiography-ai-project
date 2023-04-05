@@ -8,13 +8,23 @@ Our model's hyperparameter search procedure consists of two steps, which we term
 
 \section{K-Fold Evaluation}
 
-Before we begin, we must first implement our k-fold cross-validation routine. Since model performance is sensitive to the network's random weight initialisation\footnote{This is particularly true on small datasets with unbalanced classes like ours.} \autocite{Narkhede2022}, our methodology requires k-fold cross-validation to be conducted on every experiment (i.e.\ model run). My implementation of the k-fold cross-validation process consists of two parts: a function which will divide the dataset into \(k\) folds, as well as a function that runs the k-fold cross-validation on the given model.
+Before we begin, we must first implement our k-fold cross-validation routine. Since model performance is sensitive to the network's random weight initialisation\footnote{This is particularly true on small datasets with unbalanced classes like ours.} \autocite{Narkhede2022}, our methodology requires k-fold cross-validation to be conducted on every experiment (i.e.\ model run). My implementation of the k-fold cross-validation process consists of two parts: a function which will divide the dataset into \(k\) folds, as well as a function that runs the k-fold cross-validation on the given model. The the \mintinline{python}{k_fold_dataset()} function is given as follows:\footnote{The code listings provided in this document \emph{are for illustration only}. The actual implementation is generally longer, and contains docstrings, debugging instrumentation, file I/O logic, as well as additional function arguments. Every listing will have a link to it's corresponding implementation in the git repository.}
 
 \input{listings/kfold-dataset.tex}
 
+\noindent
+One thing of note, is that our \mintinline{python}{k_fold_dataset()} function conducts all dataset-related operations using the Tensorflow's high-performance \mintinline{python}{tf.data.Dataset} API. This allows support for pre-fetch, caching, and other low-level optimisations. This function serves as a dependency which is called by \mintinline{python}{cross_validate()}, which runs the actual K-fold cross validation experiments on the given model:
+
 \input{listings/cross-validate.tex}
 
+\noindent
+The output of every k-fold cross-validation experiment will be a \enquote*{history list} containing \(k\) \mintinline{python}{tf.keras.callbacks.History} objects. This \mintinline{python}{History} object will contain training and validation metrics which will be used to calculate the average metric over \(k\) folds:
+
 \input{listings/calc-mean-metrics.tex}
+
+
+\noindent
+The above code now completes the prerequisites necessary for data gathering.
 
 \section{Establishing a Baseline}
 
