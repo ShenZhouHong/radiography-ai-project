@@ -1,6 +1,14 @@
-\chapter{Implementation}\label{implementation}
+\chapter{Implementation and Analysis}\label{implementation}
+
+In this chapter, we will present the implementation of the study methodology. Recall that the methodology has three components. We will begin with the establishment of an initial baseline, by creating and training a classical \enquote*{shallow} convolutional neural network based upon LeCun et al.'s 1998 LeNet model. \autocite{lenet1998} This classical CNN baseline will serve as the minimal performance standard that our model will aim to surpass. Next, utilising the InceptionV3 architecture which will serve as our transfer-learning base model, we will train an end-to-end (i.e.\ without transfer learning) model on our radiography dataset. This will serve as an additional baseline that will allow us to validate the transfer-learning \emph{technique} against regular end-to-end training.
+
+Following the establishment of these two baselines, we will proceed to begin an initial evaluation of two different transfer-learning base models. We will compare the performance of InceptionV3 trained with ImageNet weights \autocite{imagenet}, against InceptionV3 trained with RadImageNet \autocite{radimagenet} weights. This initial evaluation will help us explore whether a base model trained on the smaller, but domain-specific RadImageNet dataset will have any advantages over the larger, but general ImageNet dataset. We will select the better performing base model out of the two options, and proceed to optimize the model's hyperparameters.
+
+Our model's hyperparameter search procedure consists of two steps, which we term hyperparameter search Regime I and hyperparameter search Regime II. As per our methodology, in Regime I we find the optimal batch size and dropout rate for our model. This is done using a stochastic search process where the hyperparameter space of the model is randomly sampled for \(t\) trials, where each trial consists of a k-fold cross-validation of the model with the selected hyperparameters. Once the optimal combination of batch size and dropout rate are found, we will set these hyperparameters as constant and proceed to the second hyperparameter search regime. In Regime II we find the optimal learning rate and epsilon value \(\epsilon\) for the Adam optimizer, by conducting a grid search over a selection of possible values.
 
 \section{K-Fold Evaluation}
+
+Before we begin, we must first implement our k-fold cross-validation routine. Since model performance is sensitive to the network's random weight initialisation\footnote{This is particularly true on small datasets with unbalanced classes like ours.} \autocite{Narkhede2022}, our methodology requires k-fold cross-validation to be conducted on every experiment (i.e.\ model run). My implementation of the k-fold cross-validation process consists of two parts: a function which will divide the dataset into \(k\) folds, as well as a function that runs the k-fold cross-validation on the given model.
 
 \input{listings/kfold-dataset.tex}
 
