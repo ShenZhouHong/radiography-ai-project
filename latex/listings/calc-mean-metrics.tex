@@ -1,0 +1,33 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+    def calculate_mean_metrics(kfold_metrics: list[dict[str, float]]) -> dict[str, list[float]]:
+        # Initialise aggregate metrics with appropriate keys
+        aggregate_metrics: dict[str, list[float]] = {}
+        for fold in kfold_metrics:
+            for metric in fold.keys():
+                if metric not in aggregate_metrics:
+                    aggregate_metrics[metric] = []
+
+        # Calculate the average metric per epoch for every fold
+        number_of_folds: int = len(kfold_metrics)
+        for metric in aggregate_metrics.keys():
+            number_of_epochs: int = len(kfold_metrics[0][metric])
+            for epoch in range(number_of_epochs):
+                # A list of every value for that given metric in this epoch across folds
+                values_per_epoch: list[float] = [x[metric][epoch] for x in kfold_metrics]
+                mean_per_epoch  : float = sum(values_per_epoch) / number_of_folds
+                aggregate_metrics[metric].append(mean_per_epoch)
+
+        return aggregate_metrics
+    \end{minted}
+\caption{Calculating Mean Metrics from K-Fold Data (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/52b2674f328c7595a32b7e4bcd2c6d4d4824e4ca/python/common/utilities.py}{Github})}\label{listing:calc-mean-metrics}
+\end{listing}
