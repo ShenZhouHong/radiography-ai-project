@@ -135,22 +135,57 @@ At this point, having assessed the \enquote*{naive} performance of both the RadI
 
 \section{Hyperparameter Search}
 
+Our methodology calls for a two-part hyperparameter search, consisting of Hyperparameter Search Regime I, and Hyperparameter Search Regime II. Regime I is concerned with finding the best combination of batch size and dropout, while Regime II is for the best learning rate and epsilon \(\epsilon\) for the Adam optimizer. We conduct this hyperparameter search in two regimes as a compromise to the amount of compute resource that this project has. Although every hyperparameter influences every other hyperparameter, in practice it is rarely possible to conduct a hyperparameter search which varies over every hyperparameter under consideration at the same time.
+
+Instead, by constraining ourselves to two hyperparameters per search regime, we get to avoid the \enquote*{curse of dimensionality}\footnote{The concept in which the size of a hypothesis space grows combinatorially with the number of free parameters, i.e. degrees of freedom, which are added.}. Regime I is concerned with hyperparameters that are specific to the model, while Regime II is concerned with hyperparameters which are specific to the optimizer.
+
 \subsection{Hyperparameter Search Regime I}
+
+Regime I uses a stochastic search process where the hyperparameter hypothesis space is randomly sampled \(t\) times. We use random search for Regime I because random search performs better than grid search over large hypothesis spaces, where the process of randomly sampling the hypothesis space will yield better hyperparameters as \(t\) increases, in a manner similar to Monte Carlo methods in statistics. \autocite{randomsearch} We begin by defining the range of batch size from \(16\) to \(2048\), and the range of possible dropout rates from \(0.00\) to \(0.50\). Next we construct a search function which conducts \(t\) trials, where during each trial a random portion of the hypothesis space is sampled, and then evaluated using k-fold validation with \(k = 6\). We use a slightly lower \(k\) value as a concession to the amount of compute resources available: given \(20\) epochs of training per k-fold, and \(6\) folds per trial, this hyperparameter search regime conducts a total of 12,000 epochs of training over the course of 2 days (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/master/python/hyperparam-search/regime-1.ipynb}{Github}).
 
 \input{listings/regime-1.tex}
 
+\noindent
+The results of this hyperparameter search are then plotted, with the maximum observed validation AUROC represented as the colour of the data point in the following scatter plot. Note that the color-map is scaled according to the highest and lowest observed average validation AUROC.
+
 \input{graphs/hypersearch-regime-1.tex}
+
+\noindent
+What were some of the learning rate and batch size combinations that we found? The following table lists out the top ten hyperparameter options.
+
+\input{tables/regime-1-top-ten.tex}
+
+\noindent
+As we can from a glance, a reasonable batch size seems to hover between \(1500\) to \(2000\). Likewise, a good dropout value seems to be around \(0.20\). This corresponds the colour gradient that we can see in the scatter plot. As an additional visualisation, we will also graph a random assortment of nine hyperparameter choices from our hypothesis space sample:
 
 \input{graphs/hypersearch-regime-1-examples.tex}
 
+\noindent
+The graphs above represent a selection of nine batch size and dropout combinations, sorted by best-performing to worse-performing. The first graph represents the top-performing hyperparameter combination, which we will graphs in greater detail below:
+
 \input{graphs/regime-1-best-candidate.tex}
+
+\noindent
+Thus, we complete the first hyperparameter search regime, obtaining the hyperparameter options of \(1599\) for batch size and \(0.205\) for dropout. Going forward in all subsequent models, we will use those values, after rounding them up slightly to the nearest whole figure: \mintinline{python}{batch_size: int = 1600, dropout_rate: float = 0.20}. With this information, we may now move on to the second hyperparameter search regime, where we find the best hyperparameters for the Adam optimizer.
 
 \subsection{Hyperparameter Search Regime II}
 
+For Regime II, we aim to find the best learning rate and epsilon \(\epsilon\) (an Adam-specific momentum factor). Possible values for epsilon and learning rate span not merely a continuous interval, but across several orders of magnitude. Due to the sheer size of the hypothesis space, and a lack of compute resources, I decided to perform a grid search for Regime II. We begin by implementing a grid search function, as seen below. We sample the grid at discrete intervals for both learning rate and epsilon:
+
 \input{listings/regime-2.tex}
+
+\noindent
+Running the above search routine in a Jupyter notebook (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/13893a1c14cbfdd78876fda2a45aa765377d7cfc/python/hyperparam-search/regime-2.ipynb}{Github}) on our hosted compute provider, we obtain the following results:
 
 \input{graphs/hypersearch-regime-2.tex}
 
+\input{tables/regime-2-top-ten.tex}
+
 \subsection{Final Hyperparameters}
 
-\section{Final Model Performance}
+Thus, we have completed our hyperparameter search. After implementing and running Regime I and Regime II (\href{https://github.com/ShenZhouHong/radiography-ai-project/tree/13893a1c14cbfdd78876fda2a45aa765377d7cfc/python/hyperparam-search}{Github}), we were able to find the following hyperparameter options for our final model:
+
+\input{tables/final-hyperparameters.tex}
+
+\noindent
+The implementation, analysis, and search of our model hyperparameters are now complete. Now we are ready for the final evaluation of the complete model on our hold-out test set. This will be done in the final part of our project, in the Part IV evaluation.
