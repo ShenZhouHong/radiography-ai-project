@@ -40,7 +40,6 @@ The output of every k-fold cross-validation experiment will be a \enquote*{histo
 
 \input{listings/calc-mean-metrics.tex}
 
-
 \noindent
 The above code now completes the prerequisites necessary for data gathering.
 
@@ -76,17 +75,33 @@ We implement our version of the LeNet architecture by subclassing \mintinline{py
 
 \input{graphs/lenet1998.tex}
 
+\noindent 
 The bold lines in the chart represent the \emph{average} training (red) and validation (blue) AUROC, as measured after performing k-fold cross-validation on 10 folds (\(k = 10\)). The transparent lines indicate the observed training and validation AUROC per each individual fold: this per-fold performance has been charted in order for us to better observe the consistency of model performance per epoch. Variations in performance per fold is due to a combination of different random starting conditions (due to random weight initialisation at the start of a model's training), as well as variances in floating-point calculations.
 
 What information does our data for the LeNet model tell us? First, we can observe severe overfitting: by epoch 10, performance on the training set asymptomatically approaches $1.0$ (as quantified by AUROC). However, the validation performance remains minimal: generally averaging around $0.60$, with certain instances of the model performing little better than chance ($0.50$). This information indicates that a classical \enquote*{shallow} CNN lacks the representational power to extract the features necessary to perform classification on our dataset. Indeed, it appears that the LeNet model fails to converge at all. This is to be expected: and our experiment yields a minimal baseline AUROC value of $0.608$ that our subsequent models must beat. Likewise, by demonstrating that classical \enquote*{shallow} CNNs are unable to solve our problem, we make the case for using a \enquote*{deep} neural network: in the form of the InceptionV3 architecture, which we will explore in the following section.
 
 \subsection{End-to-End Training with InceptionV3}
 
+Having validated the necessity of using a deep convolutional neural network to solve this \emph{multiclass}, \emph{multilabel} classification task, our next question would be: \enquote{is it necessary to use the technique of \emph{transfer-learning} on our dataset, or would a regular end-to-end training process suffice?} Although the small size of our dataset indicates that transfer learning is appropriate, it is important for us to validate our assumptions through empirical data. Hence, we arrive at the establishment of the second baseline model: end-to-end training InceptionV3 on our dataset. Let us start by defining our base model:
+
 \input{listings/inceptionv3.tex}
+
+\noindent
+We define a \mintinline{python}{class TransferLearningModel} which will be instantiated by every k-fold validation trial. Note that for this particular experiment, as we are establishing an end-to-end trained baseline, we will be setting \mintinline{Python}{self.inceptionv3(weights=None)} and the attribute \mintinline{python}{self.inceptionv3.trainable = False}. Naturally in the actual implementation (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/cf8c9e9a1f07849787a98b2fc51df690354bf194/python/common/model.py}{Github}) this is done through an argument in the class constructor, however the listing is simplified for the purpose of size and readability. So what happens now when we run the kfold experiment (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/ef29e4cb63fc38185b3bb45fc37027df3e385a44/python/initial-evaluation/inceptionv3-end2end.ipynb}{Github})?
 
 \input{graphs/inceptionv3-end2end.tex}
 
+\noindent
+We can observe that the end-to-end variant performs marginally: achieving an average AUROC of \(0.692\). However, upon a closer examination it is clear that the validation AUROC of each individual k-fold trial is highly erratic. The large spikes in validation AUROC indicates a failure to converge, as the dataset is too small for the number of tunable weights in the model. The InceptionV3 model has 189 layers, with a combined total of 23.9 million trainable weights: representing a parameter space several orders of magnitude larger than our dataset. The highly erratic validation AUROC is only a symptom of the model's inability to converge, and demonstrates clearly that regular end-to-end training is insufficient and inappropriate for our dataset.
+
 \subsection{Baseline Metrics}
+
+Having completed assessing our two baseline models, we are left with the following metrics that will help us in our own evaluation:
+
+\input{tables/baseline-benchmarks.tex}
+
+\noindent
+The first level of performance that our subsequent models are expected to achieve is a validation AUROC \(> 0.50\). As a measurement of classifier performance, an AUROC of \(0.50\) indicates performance no better than chance (i.e. the same as choosing by random). If we are unable to meet the minimum baseline of \(> 0.50\), then our entire approach may be unrealistic and infeasible. The second baseline that we must achieve is a performance of \(> 0.61\). For that is the best performance measured from a classical \enquote*{shallow} CNN. As deep neural networks, with their dozens (if not hundreds) of layers incur a computational cost that is an order of magnitude above classical \enquote*{shallow} CNNs, if our model is not able to exceed the performance of a regular CNN, it will be better to develop a regular CNN instead. Finally, the last baseline that we established allows us to validate the suitability of the transfer-learning technique. If our model is unable to meet an AUROC of \(> 0.69\), then we will be better served to train our model architecture directly on our dataset.
 
 \section{InceptionV3 with Transfer Learning}
 
@@ -96,7 +111,7 @@ What information does our data for the LeNet model tell us? First, we can observ
 
 \subsection{Base Model Trained on InceptionV3 Dataset}
 
-\input{graphs/inceptionv3-radimagenet.tex}
+\input{graphs/inceptionv3-imagenet.tex}
 
 \subsection{Comparison between RadImageNet and ImageNet}
 
