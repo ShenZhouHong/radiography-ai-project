@@ -87,7 +87,7 @@ Having validated the necessity of using a deep convolutional neural network to s
 \input{listings/inceptionv3.tex}
 
 \noindent
-We define a \mintinline{python}{class TransferLearningModel} which will be instantiated by every k-fold validation trial. Note that for this particular experiment, as we are establishing an end-to-end trained baseline, we will be setting \mintinline{Python}{self.inceptionv3(weights=None)} and the attribute \mintinline{python}{self.inceptionv3.trainable = False}. Naturally in the actual implementation (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/cf8c9e9a1f07849787a98b2fc51df690354bf194/python/common/model.py}{Github}) this is done through an argument in the class constructor, however the listing is simplified for the purpose of size and readability. So what happens now when we run the kfold experiment (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/ef29e4cb63fc38185b3bb45fc37027df3e385a44/python/initial-evaluation/inceptionv3-end2end.ipynb}{Github})?
+We define a \mintinline{python}{class TransferLearningModel} which will be instantiated by every k-fold validation trial. Note that for this particular experiment, as we are establishing an end-to-end trained baseline, we will be setting \mintinline{Python}{self.inceptionv3(weights=None)} and the attribute \mintinline{python}{self.inceptionv3.trainable = True}. Naturally in the actual implementation (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/cf8c9e9a1f07849787a98b2fc51df690354bf194/python/common/model.py}{Github}) this is done through an argument in the class constructor, however the listing is simplified for the purpose of size and readability. So what happens now when we run the kfold experiment (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/ef29e4cb63fc38185b3bb45fc37027df3e385a44/python/initial-evaluation/inceptionv3-end2end.ipynb}{Github})?
 
 \input{graphs/inceptionv3-end2end.tex}
 
@@ -103,17 +103,35 @@ Having completed assessing our two baseline models, we are left with the followi
 \noindent
 The first level of performance that our subsequent models are expected to achieve is a validation AUROC \(> 0.50\). As a measurement of classifier performance, an AUROC of \(0.50\) indicates performance no better than chance (i.e. the same as choosing by random). If we are unable to meet the minimum baseline of \(> 0.50\), then our entire approach may be unrealistic and infeasible. The second baseline that we must achieve is a performance of \(> 0.61\). For that is the best performance measured from a classical \enquote*{shallow} CNN. As deep neural networks, with their dozens (if not hundreds) of layers incur a computational cost that is an order of magnitude above classical \enquote*{shallow} CNNs, if our model is not able to exceed the performance of a regular CNN, it will be better to develop a regular CNN instead. Finally, the last baseline that we established allows us to validate the suitability of the transfer-learning technique. If our model is unable to meet an AUROC of \(> 0.69\), then we will be better served to train our model architecture directly on our dataset.
 
+With this information in hand, it is time for us to embark on the second part of our study: developing a transfer-learning model to infer the RUST score of radiographs of long-bone fractures. In the transfer learning technique, a base model is trained on a larger dataset, before having it's weights frozen, and then used as a component of a classifier trained on the task-specific dataset. A key decision in this process is the choice of the larger dataset that the base model will be trained on. Thus, we are lead to the second part of our study: evaluating the performance of InceptionV3 trained on ImageNet, and RadImageNet.
+
 \section{InceptionV3 with Transfer Learning}
+
+Let us begin by evaluating the performance of the RadImageNet weights. Following the same procedure as we did earlier, we instantiate a InceptionV3 model with our classifier, and set the attribute \mintinline{Python}{self.inceptionv3(weights='radimagenet.h5')} and \mintinline{python}{self.inceptionv3.trainable = False}. This class instance now has InceptionV3 with pre-trained ImageNet weights, which we have frozen. Now when we run the training process, only our classifier will be trained. We conduct the experiment in the following Jupyter notebook (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/8d295305fbf9e8a7d1993e4564731e3f3f113f2d/python/initial-evaluation/inceptionv3-radimgnet.ipynb}{Github}).
 
 \subsection{Base Model Trained on RadImageNet Dataset}
 
+The model trained on RadImageNet weights achieves an average validation AUROC of \(0.706\). Note how unlike the version of InceptionV3 that was end-to-end trained, the per-fold validation AUROC is fairly consistent: we do not see any large spikes in validation performance. Likewise, although the model begins to exhibit overfitting after epoch 15, the degree of overfitting is relatively well controlled.
+
 \input{graphs/inceptionv3-radimagenet.tex}
+
+\noindent
+This preliminary information helps inform us that the technique of transfer learning is appropriate for our use case and dataset. All that follows now is for us to evaluate the ImageNet weights, and compare their performances together.
 
 \subsection{Base Model Trained on InceptionV3 Dataset}
 
+We now conduct the same experiment in a separate Jupyter notebook with ImageNet weights (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/8d295305fbf9e8a7d1993e4564731e3f3f113f2d/python/initial-evaluation/inceptionv3-imagenet.ipynb}{Github}). Recall that the difference between RadImagenet and ImageNet is that former contains approximately 4.1 million images \autocite{radimagenet}, while the latter contains around 15.0 million \autocite{imagenet}. While the RadImageNet dataset is exclusively sourced from medical imagery, including radiographs --- the vastly larger ImageNet dataset has the potential to perform better, simply because the model was trained on a larger dataset. Does this assumption hold true?
+
 \input{graphs/inceptionv3-imagenet.tex}
 
+\noindent
+Our data indicates that the InceptionV3 weights yield a higher validation AUROC of \(0.784\), in comparison to the RadImageNet model with an AUROC of \(0.706\). This means that although the RadImageNet dataset was more domain-specific to our needs (i.e. medical radiography classification), it appears the sheer size of the ImageNet datset yielded weights which performed better.
+
 \subsection{Comparison between RadImageNet and ImageNet}
+
+However, despite this difference in \enquote*{naive} (i.e. untuned, without hyperparameter optimisation), the performance characteristics of both models are quite different. Observe how the overfitting profile of the RadImageNet model is less severe than that of ImageNet, despite achieving a lower validation AUROC overall. Likewise, while the validation AUROC of the ImageNet model begins to decrease past epoch 15 due to overfitting, the validation AUROC of RadImageNet is still growing by epoch 50. Although our methodology calls for us to select the better performing model out of both of them, the information shown here offers room for further investigation --- which can be the subject of a future study.
+
+At this point, having assessed the \enquote*{naive} performance of both the RadImageNet weights and the regular ImageNet weights, we will select the better-performing ImageNet weights as the basis for our transfer learning model. Going forward, we are now ready to tackle our problem directly: and begin the process of hyperparameter search.
 
 \section{Hyperparameter Search}
 
