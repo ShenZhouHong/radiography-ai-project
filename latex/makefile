@@ -4,7 +4,7 @@
 COMMIT_EPOCH = $(shell git log -1 --pretty=%ct)
 
 # Multiple source names can be added by seperating entries with a space ' '
-source_names = implementation proposal
+source_names = proposal
 
 # Makes sure latexmk always runs
 .PHONY: all clean delete $(source_names:%=%.pdf)

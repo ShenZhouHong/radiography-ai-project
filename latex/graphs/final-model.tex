@@ -1,0 +1,72 @@
+% Template for a TiKZ/PGFPlot Graph
+\begin{figure}[H]
+    \begin{tikzpicture}[trim axis left]
+        % All the graphing elements are inside axis environment
+        \begin{axis}[
+            width=\textwidth,
+            height=7cm,
+            scale only axis,
+            title={Final Model (Best Hyperparameters) History},
+            xlabel={Epochs},
+            ylabel={AUROC},
+            xmin=1, xmax=40,
+            ymin=0.5, ymax=1,
+            grid=both,
+            minor tick num=1,
+            grid style=dotted,
+            legend pos=north east,
+            x tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=0
+            },
+            y tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=2
+            },
+        ]
+            % First graph the validation AUROCs
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=valid_auc
+            ]{data/final-model/final_model_valid_auc.csv};
+            \addlegendentry{Avg. Validation AUROC}
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=train_auc
+            ]{data/final-model/final_model_train_auc.csv};
+            \addlegendentry{Avg. Training AUROC}
+
+            % Highest average validation AUROC
+            \addplot[
+              color=blue,
+              no marks,
+              dotted,
+              ultra thick,
+              domain=0:50
+            ]
+            {
+              0.821
+            };
+            \addlegendentry{$y = 0.821$}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Training History of the Final Model (with Best Hyperparameters)}\label{graph:final_model}
+\end{figure}
+  

@@ -24,5 +24,6 @@ The directory structure of `latex/` is organised as follows:
 * `graphs/`: contains TiKZ/PGF plots, generated using values located in `data/`
 * `media/`: contains misc. graphics files like images or diagrams.
 * `sections/` contains the textual body of the report organised by section.
+* `standalone/` contains `.tex` files for standalone PDF diagrams. These are copies of figures from `graphs/` or `figures/`, but built as individual PDFs for inclusion in non-LaTeX posters and presentations.
 
 The bibliography of the project can be found as a BibLaTeX file located at `bibliography.bib`.
