@@ -10,7 +10,15 @@ The dataset is made available as three `tf.data.Dataset` objects which can be im
 * `ds_valid/`
 * `ds_test/`
 
-These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook.
+These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook. The datasets are directories, which have been compressed using [`xz`](https://en.wikipedia.org/wiki/XZ_Utils) to save space. In order to extract them, run:
+
+```bash
+tar -xf ds_train.tar.xz
+tar -xf ds_valid.tar.xz
+tar -xf ds_test.tar.xz
+```
+
+Note: the datasets are stored using [`git-LFS`](https://git-lfs.com/).
 
 ### Features
 

@@ -1,5 +1,9 @@
-# Do not commit the datasets to the project repository (for now)
+# Do not commit the raw, uncompressed dataset objects in any case
 ds_test/
 ds_train/
 ds_valid/
-raw_images/
+
+# Until we obtain permission to release the dataset, do not commit the compressed dataset objects.
+ds_test.tar.xz
+ds_train.tar.xz
+ds_valid.tar.xz
