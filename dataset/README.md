@@ -10,7 +10,13 @@ The dataset is made available as three `tf.data.Dataset` objects which can be im
 * `ds_valid/`
 * `ds_test/`
 
-These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook. The datasets are directories, which have been compressed using [`xz`](https://en.wikipedia.org/wiki/XZ_Utils) to save space. In order to extract them, run:
+These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook. 
+
+### Filesize and Compression
+
+By default, the `tf.data.Dataset` objects are directories with a large size. The `ds_train/` directory is over 2.2 GB in size, while `ds_valid` and `ds_test` are 472 MB and 473 MB each, respectively. This makes for a total uncompressed filesize of nearly ~3100 GB. Prior to working with the data, ensure that your device has enough space to extract all three datasets.
+
+Hence the directories have been compressed using [`xz`](https://en.wikipedia.org/wiki/XZ_Utils) to save space. The compressed files are much smaller, totalling 'only' 510 MB. In order to extract them, run:
 
 ```bash
 tar -xf ds_train.tar.xz
@@ -18,7 +24,7 @@ tar -xf ds_valid.tar.xz
 tar -xf ds_test.tar.xz
 ```
 
-Note: the datasets are stored using [`git-LFS`](https://git-lfs.com/).
+The datasets `.tar.xz` files are stored using [`git-LFS`](https://git-lfs.com/).
 
 ### Features
 
