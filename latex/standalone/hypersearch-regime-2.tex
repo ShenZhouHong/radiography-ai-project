@@ -1,0 +1,64 @@
+\documentclass[tikz]{standalone}
+
+\input{preamble.tex}
+
+\begin{document}
+
+\begin{tikzpicture}
+    % All the graphing elements are inside axis environment
+    \begin{axis}[
+        width=\textwidth,
+        height=5cm,
+        scale only axis,
+        title={Regime II Hyperparameter Grid Search Results},
+        xlabel={Learning Rate},
+        ylabel={Epsilon ($\epsilon$)},
+        xmode=log,
+        ymode=log,
+        grid=both,
+        minor tick num=1,
+        grid style=dotted,
+        enlarge x limits=false,
+        enlarge y limits=false,
+        mesh/ordering=y varies,
+        colormap name=viridis,
+        point meta min=0.5,
+        point meta max=0.8,
+        colorbar,
+        colormap/viridis,
+        colorbar horizontal=true,
+        colorbar style={
+            xlabel={Max Valid. AUC},
+            x tick label style={
+                /pgf/number format/fixed,
+                /pgf/number format/fixed zerofill,
+                /pgf/number format/precision=2,
+            },
+        },
+        nodes near coords={\pgfmathprintnumber\pgfplotspointmeta},
+        every node near coord/.append style={
+            xshift=0pt,
+            yshift=-7pt,
+            black,
+            font=\footnotesize,
+            /pgf/number format/fixed,
+            /pgf/number format/fixed zerofill,
+            /pgf/number format/precision=4,
+        },
+    ]
+    \addplot [
+        matrix plot*,
+        mesh/cols=4,
+        mesh/rows=8,
+        point meta=explicit
+    ] table[
+        col sep=comma,
+        header=true,
+        x=learning_rate,
+        y=epsilon_rate,
+        meta=max_val_auc
+      ]{../data/hypersearch/regime-2.csv};
+    \end{axis}
+\end{tikzpicture}
+
+\end{document}

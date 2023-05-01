@@ -1,0 +1,28 @@
+% Packages sourced from humanize.cls
+\usepackage{fontspec}                 % LuaLaTeX font support
+\usepackage{babel}                    % Multiple languages and metadata support
+\usepackage{libertinus-otf}           % Beautiful libertinus font
+\usepackage{microtype}                % Microtypography adjustments
+% \usepackage{geometry}                 % Adjusts for narrower page margins
+
+% Packages sourced from configuration.tex
+% Scientific graphics and plotting
+\usepackage{tikz}                   % Used for graphical illustrations.
+\usepackage{pgfplots}               % Used for scientific graphs and charts
+\usepgfplotslibrary{groupplots}
+
+\usepackage{float}                  % For arranging floats
+% \usepackage{graphicx}               % Required for embedding images
+% \usepackage[export]{adjustbox}
+% \usepackage{booktabs}               % For prettier tables
+% \usepackage{tabularx}               % Auto scale tables to \textwidth
+% \usepackage{datetime2}
+
+\usepackage{minted}                 % Code highlighting: \begin{minted}{python}
+\usepackage{inconsolata}
+\setmonofont[
+  AutoFakeSlant,
+  BoldItalicFeatures={FakeSlant},
+  UprightFont = *-Regular,
+  BoldFont = *-Bold
+]{Inconsolatazi4}
