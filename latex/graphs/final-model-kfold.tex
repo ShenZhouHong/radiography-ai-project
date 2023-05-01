@@ -1,0 +1,103 @@
+% Template for a TiKZ/PGFPlot Graph
+\begin{figure}[H]
+    \begin{tikzpicture}[trim axis left]
+        % All the graphing elements are inside axis environment
+        \begin{axis}[
+            width=\textwidth,
+            height=7cm,
+            scale only axis,
+            title={Final Model K-Fold Evaluation ($k = 10 $)},
+            xlabel={Epochs},
+            ylabel={AUROC},
+            xmin=1, xmax=40,
+            ymin=0.5, ymax=1,
+            grid=both,
+            minor tick num=1,
+            grid style=dotted,
+            legend pos=north east,
+            x tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=0
+            },
+            y tick label style={
+              /pgf/number format/fixed,
+              /pgf/number format/fixed zerofill,
+              /pgf/number format/precision=2
+            },
+        ]
+            % First graph the validation AUROCs
+            \addplot[
+                color=blue,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/final-model/kfold_final_model_valid_auc.csv};
+            \addlegendentry{Avg. Validation AUROC}
+
+            \addplot[
+                color=red,
+                no markers,
+                ultra thick
+            ]
+            table[
+                col sep=comma,
+                header=true,
+                x=epochs,
+                y=avg
+            ]{data/final-model/kfold_final_model_train_auc.csv};
+            \addlegendentry{Avg. Training AUROC}
+
+            % Highest average validation AUROC
+            \addplot[
+              color=blue,
+              no marks,
+              dotted,
+              ultra thick,
+              domain=0:50
+            ]
+            {
+              0.789
+            };
+            \addlegendentry{$y = 0.789$}
+
+            \foreach \n in {1,...,10} {
+                \addplot[
+                    color=blue,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/final-model/kfold_final_model_valid_auc.csv};
+            }
+
+            \foreach \n in {1,...,10} {
+                \addplot[
+                    color=red,
+                    no markers,
+                    opacity=0.2,
+                    thick
+                ]
+                table[
+                    col sep=comma,
+                    header=true,
+                    x=epochs,
+                    y=fold\n
+                ]{data/final-model/kfold_final_model_train_auc.csv};
+            }
+
+        \end{axis}
+    \end{tikzpicture}
+    \caption{K-Fold Evaluation for Final Model with Best Hyperparameters.}\label{graph:kfold_final_model}
+\end{figure}
+  
