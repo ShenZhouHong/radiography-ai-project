@@ -14,7 +14,7 @@ These datasets are built using the `build-tfdataset.ipynb` Jupyter notebook.
 
 ### Filesize and Compression
 
-By default, the `tf.data.Dataset` objects are directories with a large size. The `ds_train/` directory is over 2.2 GB in size, while `ds_valid` and `ds_test` are 472 MB and 473 MB each, respectively. This makes for a total uncompressed filesize of nearly ~3100 GB. Prior to working with the data, ensure that your device has enough space to extract all three datasets.
+By default, the `tf.data.Dataset` objects are directories with a large size. The `ds_train/` directory is over 2.2 GB in size, while `ds_valid` and `ds_test` are 472 MB and 473 MB each, respectively. This makes for a total uncompressed filesize of nearly 3.1 GB. Prior to working with the data, ensure that your device has enough space to extract all three datasets.
 
 Hence the directories have been compressed using [`xz`](https://en.wikipedia.org/wiki/XZ_Utils) to save space. The compressed files are much smaller, totalling 'only' 510 MB. In order to extract them, run:
 
