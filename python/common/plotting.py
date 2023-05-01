@@ -7,6 +7,7 @@ import numpy as np
 import keras
 import tensorflow_addons as tfa
 import pickle
+from .utilities import *
 
 def plot_history(model_history, model_num: int=1, plot_acc: bool=True, plot_loss: bool=False):
     """

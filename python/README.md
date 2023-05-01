@@ -25,3 +25,7 @@ These correspond to the hyperparameter search regime I, and the hyperparameter s
 ## Analysis
 
 These notebooks are used to analyse the hyperparameter search and model data.
+
+## Final Model
+
+The final model folder contains the notebook used to train the final model (with the best hyperparameters), the model weights, an inference example, as well as related analysis code and data CSV files.
