@@ -1,6 +1,6 @@
 % Humanize: An Opinionated LaTeX Template for the Humanities
 \NeedsTeXFormat{LaTeX2e}[2021/11/15]
-\ProvidesClass{humanize}[2021/11/15 v1.00 Humanize Custom LaTeX Report Class]
+\ProvidesClass{humanize}[2021/11/15 v1.00 Humanize Custom LaTeX Book Class]
 
 % Options made available used by \RequirePackage{setspace}
 \DeclareOption{singlespacing}{%
@@ -115,7 +115,7 @@
 
 % Pass any other undeclared options to base article documentclass
 \DeclareOption*{
-  \PassOptionsToClass{\CurrentOption}{report}
+  \PassOptionsToClass{\CurrentOption}{book}
 }
 
 \AtBeginDocument{%
@@ -148,7 +148,7 @@
 \ProcessOptions\relax
 
 % First we load our base report class, as humanize is based upon report
-\LoadClass{report}
+\LoadClass{book}
 
 % General packages in use
 \RequirePackage{fontspec}                 % LuaLaTeX font support
@@ -214,6 +214,7 @@
 \hypersetup{
   colorlinks=true,
   allcolors=blue,
-  bookmarksopen=true
+  bookmarksopen=true,
+  pdfpagemode=UseOutlines
 }
 \urlstyle{sf}
