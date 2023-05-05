@@ -1,0 +1,24 @@
+\begin{listing}[H]
+    \begin{minted}[
+        baselinestretch=1.0,
+        frame=lines,
+        mathescape,
+        autogobble,
+        fontsize=\footnotesize,
+        style=default,
+        breaklines,
+        breakbytoken
+    ]{python}
+        classifier: tf.keras.Sequential = tf.keras.Sequential([
+            layers.GlobalMaxPooling2D(),
+            layers.Dense(1024, activation='relu'),
+            layers.Dropout(dropout_rate),
+            layers.Dense( 512, activation='relu'),
+            layers.Dropout(dropout_rate),
+            layers.Dense( 256, activation='relu'),
+            layers.Dropout(dropout_rate),
+            layers.Dense(  18, activation='sigmoid')
+        ])
+    \end{minted}
+\caption{Classifier Architecture (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/cf8c9e9a1f07849787a98b2fc51df690354bf194/python/common/model.py}{Github})}\label{listing:classifier-def}
+\end{listing}

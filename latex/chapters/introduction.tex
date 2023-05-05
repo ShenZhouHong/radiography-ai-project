@@ -6,7 +6,7 @@
 % How will you demonstrate that your project fulfils its aims?
 
 \chapter{Introduction}
-Long bone fractures are a frequent effect of high-energy trauma \autocite{HStein1999}, among which tibial fractures of the lower extremities are the most common. These fractures require long-term follow-up, where after initial fixation the fracture site must be re-examined at regular intervals for callus formation\footnote{The development of cartilaginous material containing bone-forming cells.}, bridging, and union \autocite{Jones2020}. Whelan et al's Radiographic Union Score for Tibial Fractures (RUST score) is a discrete 12-point scale that serves a common metric for the assessment of union from the lateral and anteroposterior\footnote{i.e.\ front-to-back.} radiograph of a fracture \autocite{Whelan2010}. This project proposes a means to automate the assessment of fracture healing, by using machine learning to classify radiographs of tibial fractures according to their RUST Scores.
+Long bone fractures are a frequent effect of high-energy trauma \autocite{HStein1999}, among which tibial fractures of the lower extremities are the most common. These fractures require long-term follow-up, where after initial fixation the fracture site must be re-examined at regular intervals for callus formation\footnote{The development of cartilaginous material containing bone-forming cells.}, bridging, and union \autocite{Jones2020}. Whelan et al's Radiographic Union Score for Tibial Fractures (RUST score) is a discrete 12-point scale that serves a common metric for the assessment of union from the lateral and anteroposterior\footnote{i.e.\ front-to-back.} radiograph of a fracture \autocite{Whelan2010}. This project proposes a means to automate the assessment of fracture healing, by using transfer-learning to develop a machine learning model to classify radiographs according to their RUST Scores.
 
 \section{Aims and Motivation}
 
@@ -14,7 +14,9 @@ Non-union and delayed union are significant complications in fracture healing, o
 
 Recent advances in deep learning, coupled with the increasing availability of large radiographic datasets (e.g. CheXpert, LERA, MURA) \autocites{CheXpert2019}{LERA}{MURA2017} offer the possibility of automating the process of fracture classification. Certain research models such as Rajpurkar et al's DNN ConvNet are able to meet, or exceed radiologist-level performance for abnormality classification in specific anatomical domains \autocite{MURA2017}, and as of 2021 commercial developments are beginning to see regulatory clearance\footnote{Authorisation for real-world clinical use by national health agencies like the Food and Drug Administration (FDA), Health Canada, \emph{Conformité Européenne}, etc.} \autocite{Adams2021}.
 
-However, much of the current available literature\footnote{A selection of which are analysed with commentary in \autoref{background}.} is focused on the mere detection and classification of fractures (i.e. abnormality detection). Such models either perform binary classification (e.g. \enquote{Is this a \emph{normal} radiograph?}), multi-class (e.g. \enquote{Is this a \emph{leg}, \emph{arm}, or \emph{knee} fracture?}), or localisation (e.g. \enquote{Where \emph{is} the fracture on this radiograph?}). Comparatively less work has been done on the \emph{characterisation} of radiographs, where the properties of a fracture are described \autocite{Tanzi2020}. This gap in the field offers opportunity for further investigation, especially as it is not the mere presence of a fracture which informs medical decision-making, but rather its severity and properties. By creating an machine learning model where the RUST-score of a fracture is inferred from a radiograph, we hope to advance the state of AI in medical imaging, and develop better diagnostic tooling.
+However, much of the current available literature\footnote{A selection of which are analysed with commentary in \autoref{background}.} is focused on the mere detection and classification of fractures (i.e. abnormality detection). Such models either perform binary classification (e.g. \enquote{Is this a \emph{normal} radiograph?}), multi-class (e.g. \enquote{Is this a \emph{leg}, \emph{arm}, or \emph{knee} fracture?}), or localisation (e.g. \enquote{Where \emph{is} the fracture on this radiograph?}). Comparatively less work has been done on the \emph{characterisation} of radiographs, where the properties of a fracture are described \autocite{Tanzi2020}. The existence of this \enquote*{research gap} can be in part attributed to the absence of large radiographic datasets with quality labelling.
+
+This gap in the field offers opportunity for further investigation, especially as it is not the mere presence of a fracture which informs medical decision-making, but rather its severity and properties. This study aims to build a machine-learning model which infers the RUST score of a fracture from a pair of radiographs, specifically utilising the technique of \emph{transfer-learning} in order to address the challenges of working with small datasets. By building a model that infers the RUST score of a fracture from it's associated radiograph, we hope to demonstrate the feasibility of such an approach, and open the door to further investigation, 
 
 \section{Objectives and Evaluation}
 
@@ -22,19 +24,22 @@ However, much of the current available literature\footnote{A selection of which 
 
 % The objective of this project is to develop an AI model that is able to receive pairs of input radiographs, and output a projected RUST numeric rust score, as well as a heatmap of features that the model detects. As the RUST score is a sum derived from the characterization of a fracture from four different tibial cortices\footnote{The cortex is the outermost layer of the bone. The RUST Score relies on an examination of the anterior, posterior, lateral, and medial cortex of the tibia. \autocite{Whelan2010}}, the model must process input in pairs of two radiographs. As our dataset is limited to only a few thousand samples, we will be using transfer learning to train a broader, general-purpose model on our domain specific task.\footnote{See \autoref{methodology} for further information.}
 
-The objective of this project is to develop an AI model using transfer learning that is able to predict the RUST score of a pair of anteroposterior and lateral radiographs. We will evaluate two different transfer learning approaches based on the InceptionV3 model architecture\autocite{inceptionv3}.
-The first model will use InceptionV3 trained with the general-purpose ImageNet dataset \autocite{imagenet}.
-The second model will use the same InceptionV3 architecture, but trained with the domain-specific RadImageNet dataset \autocite{radimagenet}. The development and comparative evaluation of these two \enquote*{base} models for transfer learning will allow us to compare and contrast the use of a model pre-trained on a general-purpose dataset (ImageNet) versus a model pre-trained on a slightly smaller, but domain-specific dataset (RadImageNet).
+The objective of this project is to develop an AI model using \emph{transfer-learning} that is able to predict the RUST score of a pair of anteroposterior and lateral radiographs. Because our primary constraint is the size of our dataset (around ~3,000 radiographs, see \hyperref[sec:dataset]{Dataset}), we will be utilising the technique of transfer-learning to demonstrate the feasibility of training AI models on datasets of this order of magnitude. We will be using the InceptionV3 model architecture \autocite{inceptionv3} as the base model with a custom classifier for our transfer-learning approach. 
 
-\clearpage
-\subsection{Project Specification}
+First, we will build and evaluate model that is end-to-end trained without the use of transfer-learning (\hyperref[sec:protocol-i-method]{Protocol I}). This will serve as a baseline benchmark for our subsequent attempts.
+Next, we will evaluate two different transfer learning approaches based on the InceptionV3 model architecture. The first model will use InceptionV3 trained with the general-purpose ImageNet dataset \autocite{imagenet} (\hyperref[sec:protocol-ii-method]{Protocol II}). The second model will use the same InceptionV3 architecture, but trained with the domain-specific RadImageNet dataset \autocite{radimagenet} (\hyperref[sec:protocol-iii-method]{Protocol III}). The development and comparative evaluation of these two base models for transfer learning will allow us to compare and contrast the use of a model pre-trained on a general-purpose dataset (ImageNet) versus a model pre-trained on a slightly smaller, but domain-specific dataset (RadImageNet). 
 
-Thus, the aims of this project can be summarised as the following three objectives:
+Afterwards, we will select the best-performing base model and find the best-performing hyperparameters. This will be done via a hyperparameter search in two steps, called \hyperref[sec:regime-i]{Regime I} and \hyperref[sec:regime-ii]{Regime II}. Regime I will be a random-search on batch size and dropout, while Regime II will be a grid search on learning rate and epsilon. Finally, the model trained with the best-performing hyperparameters will be evaluated on the hold-out test set, and the overall performance will be examined.
 
-\begin{itemize}
-    \item Evaluate the performance of InceptionV3 trained with ImageNet and RadImageNet on a transfer learning task.
-    \item Develop and optimise the best-performing transfer learning model for use in the automated assessment of fracture healing through RUST scores.
-    \item Assess model performance through it's AUROC (Area Under Receiver Operating Characteristic) value.\footnote{See \ref{AUROC} for further information.}
-\end{itemize}
+% \clearpage
+% \subsection{Project Specification}
+
+% Thus, the aims of this project can be summarised as the following three objectives:
+
+% \begin{itemize}
+%     \item Evaluate the performance of InceptionV3 trained with ImageNet and RadImageNet on a transfer learning task.
+%     \item Develop and optimise the best-performing transfer learning model for use in the automated assessment of fracture healing through RUST scores.
+%     \item Assess model performance through it's AUROC (Area Under Receiver Operating Characteristic) value.\footnote{See \ref{AUROC} for further information.}
+% \end{itemize}
 
 % https://en.wikipedia.org/wiki/Receiver_operating_characteristic

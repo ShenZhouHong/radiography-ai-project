@@ -1,1 +1,88 @@
-<mxfile host="app.diagrams.net" modified="2023-01-18T22:57:36.557Z" agent="5.0 (X11; Ubuntu)" version="20.8.5" etag="XRaqVi8Med_STrHdSur7" type="device"><diagram id="A32RPW_bASQyMoJi-ztP" name="Page-1">7Vtdc6M2FP01nj5lByHA5LFrZ9vMpNm0TrfdvgmQsRoZuUKO7X3ob68wEhiDbeIved0kM4l1kYTQvefcIwl3YG88/4mjyegXFmHasa1o3oH9jm37zq38mxkWygDc3BBzEuUmUBoG5BtWRktZpyTCaaWiYIwKMqkaQ5YkOBQVG+KczarVhoxW7zpBMa4ZBiGidesfJBIj9RR2t7T/jEk80ncGnnrgMdKV1ZOkIxSx2YoJ3nVgjzMm8k/jeQ/TbO70vOTtPm24WgyM40S0afDl+fPo02Rw/5cXPvWfB7++OJZzA1U3r4hO1RM/cXzzzBFJSBKrkYuFng4cydlRRcbFiMUsQfSutH7kbJpEOLunJUtlnQfGJtIIpPFvLMRCuRpNBZOmkRhTdTW/Z3ajjQ+qTCmb8hBveTodMIjHWGypZxfukGGM2RgLvpDtOKZIkNfqOJAKqLioV865/KCm/Q0uqHugY3tUDvdjRF7lx1gsJyU3Bdpwn4R4IghLvkB9Td49WK8vbQ29rJg0YH/k4YgIiaApx8XN+K7u1qKj6vtZ1uFggpYumkl2qPo5pihNVdUhobTHKOPLfuDQzX4zO0vEij3/kfZUcPaCV654y59iTK+YCzzfHj91f6sGUCNWU5Yqzkr8A11ltIJ9zzpRhHRrEfKVYBqlJtAp55Av/szaf3B18avqblnozyulhSodEdV2S1R7JlF9e0E+O+LcOy3n3jc5985ejPobiu7HMp0/ygc7hFH/dT9YWf6XlCbpuT2XemicMWQSpNk/jiLC4kxS1UNGKolJ9jFcUCIjg8PdZBvkMfQQFAYUvsTLyPo8FbIbrOxpHkTAbWDl4dAOwyb2jbzAczP2LTROGXYHUbHrVKnYtupc7DdQsX8qKgawFltSKyXpEEv/Wg8Y8SuQTV5LkAOr2XnnQblnVDctFbL0l22VGN/ZaJ1fDhBY4DCB5Ye4GcqB7zqudQIor6sqCE3LKr0SvWos+22x7JjEsn9BWLYahIA5oBrIuZcH1CsV03qPazc4uybBqYf5Vj39++BZtuojgQ7T01L0Wa1rV3TznuA9l76uIHcLCUQI+8NGEvBCHwfDIyXoNa3tOIa1tl2Pu//1vgdou/gGRlffYM/l9ztdfFd0sb40N04XoL5NejIRqdcJN7RYJViSMaR2zKM4WkbxiTQhBpGLu03+vfW6EJ1CE64v3tyucU14xiXDLm/3T+lt6Ws/cpq87dsB9M6xAjDvbbtx2+0ajiiLQ+2dZ5S2yaSuO34j3H54RNnQbO+fKcsrWL3Hx/bIaz6d3Ii07/nUEVzaqaNd3x67ilV3DqQ2iDO6JaaH+S6jr1pGg0uT0fZ+y7eS4w+k/K37sxHhMgnQRedNxy4rmEgvYU9X55nN+aQSo5vS0QmSjnmlB+u0d0UvpOmt9J25x2jqgfWNt3Mex7y/krZzRWZcHMJ6lnjiTLCQZU3v68l9RsYUZfl4lw+qLFsQoXXJ7rldy+EN3mnK4R44mXvqL0esuuf8/mmxZ3UEP1yeI/YT8cd5Dw04e76Itt4TyYZz+cL+HO+4bEHbZvKuBiXwDCt8WN8or5DD+dmhxR7nEdjBOSM7yGL5zY7ltZWvx8C7/wA=</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2023-05-05T11:47:26.159Z" agent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/112.0" version="21.2.3" etag="TNSFoIUIDZOxQ_YDOGEP" type="device">
+  <diagram id="A32RPW_bASQyMoJi-ztP" name="Page-1">
+    <mxGraphModel dx="849" dy="815" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="580" pageHeight="610" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-31" value="Pre-Training" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-1" target="VTOhFpSIZ6cPDTSQk404-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-1" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Model Architecture&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;glass=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="230" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-7" value="Yields" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="VTOhFpSIZ6cPDTSQk404-2" target="VTOhFpSIZ6cPDTSQk404-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-9" value="Yields" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-4" target="VTOhFpSIZ6cPDTSQk404-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-4" value="&lt;div&gt;&lt;b&gt;RadImageNet&lt;/b&gt;&lt;/div&gt;&lt;div&gt;~5.0 million&lt;br&gt;&lt;/div&gt;&amp;nbsp;radiographs" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="450" y="160" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-13" value="Transfer Learning" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-6" target="VTOhFpSIZ6cPDTSQk404-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-6" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Trained on&lt;/div&gt;&lt;div&gt;ImageNet&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;fillColor=#f8cecc;strokeColor=#b85450;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="230" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-15" value="Transfer Learning" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-8" target="VTOhFpSIZ6cPDTSQk404-14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-8" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Trained on RadImageNet&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="430" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-19" value="Yields" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-10" target="VTOhFpSIZ6cPDTSQk404-17" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-10" value="&lt;div&gt;&lt;b&gt;RUST Data&lt;/b&gt;&lt;/div&gt;&lt;div&gt;~2000&lt;/div&gt;&lt;div&gt;radiographs&lt;br&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;shadow=1;glass=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="250" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-20" value="Yields" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="VTOhFpSIZ6cPDTSQk404-14" target="VTOhFpSIZ6cPDTSQk404-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-14" value="&lt;div&gt;&lt;b&gt;RUST Data&lt;/b&gt;&lt;/div&gt;&lt;div&gt;~2000&lt;/div&gt;&lt;div&gt;radiographs&lt;br&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;shadow=1;glass=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="450" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-17" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;Transfer-learning to RUST data" style="rounded=1;whiteSpace=wrap;html=1;glass=0;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="230" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-18" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;Transfer-learning to RUST Data" style="rounded=1;whiteSpace=wrap;html=1;glass=0;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;" parent="1" vertex="1">
+          <mxGeometry x="430" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-23" value="Training" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-21" target="VTOhFpSIZ6cPDTSQk404-22" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-21" value="&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;&lt;b style=&quot;border-color: var(--border-color);&quot;&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-color: var(--border-color);&quot;&gt;Model Architecture&lt;/div&gt;&lt;div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;glass=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="30" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-25" value="Yields" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-22" target="VTOhFpSIZ6cPDTSQk404-24" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-22" value="&lt;div&gt;&lt;b&gt;RUST Data&lt;/b&gt;&lt;/div&gt;&lt;div&gt;~2000&lt;/div&gt;&lt;div&gt;radiographs&lt;br&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;shadow=1;glass=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="50" y="400" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-24" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Trained directly on&lt;/div&gt;&lt;div&gt;RUST Dataset&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;glass=0;fillColor=#f5f5f5;strokeColor=#666666;shadow=1;fontColor=#333333;" parent="1" vertex="1">
+          <mxGeometry x="30" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-32" value="Pre-Training" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="VTOhFpSIZ6cPDTSQk404-30" target="VTOhFpSIZ6cPDTSQk404-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-30" value="&lt;div&gt;&lt;b&gt;InceptionV3&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Model Architecture&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;glass=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry x="430" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-34" value="Protocol I" style="swimlane;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" parent="1" vertex="1">
+          <mxGeometry width="180" height="610" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-36" value="Protocol II" style="swimlane;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="200" width="180" height="610" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-2" value="&lt;div&gt;&lt;b&gt;ImageNet&lt;/b&gt;&lt;/div&gt;&lt;div&gt;~14.0 million&lt;br&gt;&lt;/div&gt;&lt;div&gt;images&lt;br&gt;&lt;/div&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;shadow=1;" parent="VTOhFpSIZ6cPDTSQk404-36" vertex="1">
+          <mxGeometry x="50" y="160" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="VTOhFpSIZ6cPDTSQk404-37" value="Protocol III" style="swimlane;whiteSpace=wrap;html=1;rounded=1;shadow=0;glass=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="400" width="180" height="610" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
