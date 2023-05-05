@@ -131,6 +131,24 @@ We will be using K-Fold Cross validation as a technique to get a more accurate a
 
 \input{tables/kfold-table.tex}
 
+% \noindent
+% The value of \(k=10\) is chosen because the resulting per-fold training and validation splits are no larger than a conventional train, test, and validation split of 70\%, 15\%, 15\%, where:
+
+% \begin{itemize}
+%     \item Training and Validation Set (\texttt{ds\_train + ds\_valid}): 2490 (85\%):
+%     \begin{itemize}
+%         \item K-Fold Cross-Validation, $K$ = 10:
+%         \begin{itemize}
+%             \item Training Set:  2241  (\textasciitilde76\%)
+%             \item Validation Set: 249  (\textasciitilde8.5\% per fold)
+%         \end{itemize}
+%     \end{itemize}
+%     \item Hold-out Test Set (\texttt{ds\_test}): 441 (15\%)
+% \end{itemize}
+
+\noindent
+Larger \(k\) values yield a more thorough measurement of a model's performance at the cost of additional computational costs, while lower \(k\) values risk lowering the training-validation split ratio until the training set is too small for adequate training. 
+
 \subsection{Hold-Out Test Set}\label{sec:holdout-test-set}
 A separate hold-out test set containing entirely unseen data will be reserved for a evaluation of the final model performance, after hyperparameter search. This hold-out test set will be kept strictly separate for final evaluation only, and will be used only once at the very end. With a dataset of \(\approx3,000\) samples, we will be setting aside \(15\%\) of the initial data (\(\approx450\) samples) for the hold-out test dataset.
 
@@ -186,11 +204,11 @@ After concluding Regime I, we will use the best-performing dropout and batch siz
 
 Specifically, we will investigate the following learning rates: \(10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}\) against the following epsilon values: \(10^{-7}, 10^{-6}, 10^{-5}, \ldots, 10^{-1}\).
 
-\section{Endpoints and Final Evaluation}
+\section{Research Questions and Final Evaluation}\label{sec:final-evaluation-method}
 
 Once we have completed the Hyperparameter Search Regime II, we will have obtained the optimal set of batch size, dropout, learning rate, and epsilon for our model. Now will be the occasion for us to evaluate this final model against our hold-out test set (see \autoref{sec:holdout-test-set}). To do this, we will first train a new instance of our model with said optimal hyperparameters, observing its validation AUROC. Next, we will evaluate the model against the hold-out test set, and note the test AUROC.
 
-Once we have done so, we will be able to answer the following questions for our evaluation and conclusion:
+Once we have done so, we will be able to answer the following research questions:
 % First, prior to assessing model performance, we want to determine:
 
 \begin{enumerate}

@@ -1,8 +1,8 @@
-\chapter{Implementation and Analysis}\label{implementation}
+\chapter{Implementation and Results}\label{implementation}
 
-In this chapter, we will present the implementation of the study methodology. Recall that the methodology has three components. We will begin with the establishment of an initial baseline, by creating and training a classical \enquote*{shallow} convolutional neural network based upon LeCun et al.'s 1998 LeNet model. \autocite{lenet1998} This classical CNN baseline will serve as the minimal performance standard that our model will aim to surpass. Next, utilising the InceptionV3 architecture which will serve as our transfer-learning base model, we will train an end-to-end (i.e.\ without transfer learning) model on our radiography dataset. This will serve as an additional baseline that will allow us to validate the transfer-learning \emph{technique} against regular end-to-end training.
+We begin with the establishment of an initial baseline, by training an end-to-end (i.e.\ without transfer learning) variant of the InceptionV3 model on our radiography dataset. This will serve as a baseline that will allow us to validate the transfer-learning \emph{technique} against regular end-to-end training.
 
-Following the establishment of these two baselines, we will proceed to begin an initial evaluation of two different transfer-learning base models. We will compare the performance of InceptionV3 trained with ImageNet weights \autocite{imagenet}, against InceptionV3 trained with RadImageNet \autocite{radimagenet} weights. This initial evaluation will help us explore whether a base model trained on the smaller, but domain-specific RadImageNet dataset will have any advantages over the larger, but general ImageNet dataset. We will select the better performing base model out of the two options, and proceed to optimize the model's hyperparameters.
+Following the establishment of this baseline, we will proceed to begin an initial evaluation of two different transfer-learning base models. We will compare the performance of InceptionV3 trained with ImageNet weights \autocite{imagenet}, against InceptionV3 trained with RadImageNet \autocite{radimagenet} weights. This initial evaluation will help us explore whether a base model trained on the smaller, but domain-specific RadImageNet dataset will have any advantages over the larger, but general ImageNet dataset. We will select the better performing base model out of the two options, and proceed to optimize the model's hyperparameters.
 
 Our model's hyperparameter search procedure consists of two steps, which we term hyperparameter search Regime I and hyperparameter search Regime II. As per our methodology, in Regime I we find the optimal batch size and dropout rate for our model. This is done using a stochastic search process where the hyperparameter space of the model is randomly sampled for \(t\) trials, where each trial consists of a k-fold cross-validation of the model with the selected hyperparameters. Once the optimal combination of batch size and dropout rate are found, we will set these hyperparameters as constant and proceed to the second hyperparameter search regime. In Regime II we find the optimal learning rate and epsilon value \(\epsilon\) for the Adam optimizer, by conducting a grid search over a selection of possible values.
 
@@ -25,46 +25,33 @@ The output of every k-fold cross-validation experiment will be a \enquote*{histo
 \noindent
 The above code now completes the prerequisites necessary for data gathering.
 
-\section{Establishing Baseline Performance Targets}
+\section{Establishing Baseline Performance Target}
 
-In this section, we will establish the baseline performance targets for our transfer-learning model by training and developing two models which will represent alternative approaches to the problem of multilabel classification on a small dataset. The baseline models will be: a \enquote*{shallow} CNN following LeCun et al.'s classical 1998 LeNet architecture \autocite{lenet1998}, and an InceptionV3 model that is directly end-to-end trained on our radiography dataset. We explicitly choose the above two models as our baseline for comparison, because they each help validate a different aspect of this project: whether a deep neural network is appropriate for the task in the first place, and whether the \emph{technique} of transfer learning is appropriate for our dataset. The second question of whether or not our technique is necessary is why we train a version of our model's architecture directly on the radiography data, in order to obtain a performance measure of using the same model architecture \emph{without} transfer learning. At minimum, our transfer-learning model must achieve a better performance (as measured by it's AUROC score) over the two baseline models.
+In this section, we will establish the baseline performance targets for our transfer-learning model by training and developing 
+%two models which will represent alternative approaches to the problem of multilabel classification on a small dataset. The baseline models will be: a \enquote*{shallow} CNN following LeCun et al.'s classical 1998 LeNet architecture \autocite{lenet1998}, and 
+an InceptionV3 model that is directly end-to-end trained on our radiography dataset. 
+% We explicitly choose the above two models as our baseline for comparison, because they each help validate a different aspect of this project: whether a deep neural network is appropriate for the task in the first place, and 
+This evaluates whether the \emph{technique} of transfer learning is appropriate for our dataset. 
+Let us start by defining our base model:
 
-The performance of the baseline models will be measured as the highest observed \emph{average} AUROC, found using k-fold cross-validation with \(k=10\). The value of \(k=10\) is chosen because the resulting per-fold training and validation splits are no larger than a conventional train, test, and validation split of 70\%, 15\%, 15\%, where:
+% \subsection{Shallow Convolutional Neural Network}
 
-\begin{itemize}
-    \item Training and Validation Set (\texttt{ds\_train + ds\_valid}): 2490 (85\%):
-    \begin{itemize}
-        \item K-Fold Cross-Validation, $K$ = 10:
-        \begin{itemize}
-            \item Training Set:  2241  (\textasciitilde76\%)
-            \item Validation Set: 249  (\textasciitilde8.5\% per fold)
-        \end{itemize}
-    \end{itemize}
-    \item Hold-out Test Set (\texttt{ds\_test}): 441 (15\%)
-\end{itemize}
+% For the first benchmark, we begin by implementing the shallow convolutional neural network described by LeCun et al in \autocite{lenet1998} in Tensorflow. Our implementation follows the original paper, with a slight modification in the final classifier, in order to output the 18-vector one-hot encoded label predictions. Note the presence of only two convolutional layers --- this is typical for early CNNs of that period.
 
-\noindent
-Larger \(k\) values yield a more thorough measurement of a model's performance at the cost of additional computational costs, while lower \(k\) values risk lowering the training-validation split ratio until the training set is too small for adequate training. For this initial evaluation, as we wish to yield a benchmark for baseline performance, we will be using a \(k\) value of 10. For the hyperparameter search regime, we will be using \(k=6\) in order to lower computational costs.
+% \input{listings/lenet1998.tex}
 
-\subsection{Shallow Convolutional Neural Network}
+% \noindent
+% We implement our version of the LeNet architecture by subclassing \mintinline{python}{tf.keras.Model} class, which is then passed on to our \mintinline{python}{cross_validate()} function to be evaluated. This entire experiment is conducted within a Jupyter notebook which is made available as a self-contained, reproducible unit within the project repository (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/master/python/initial-evaluation/lenet1998.ipynb}{Github}). Running the experiment yields our first AUROC to performance graph:
 
-For the first benchmark, we begin by implementing the shallow convolutional neural network described by LeCun et al in \autocite{lenet1998} in Tensorflow. Our implementation follows the original paper, with a slight modification in the final classifier, in order to output the 18-vector one-hot encoded label predictions. Note the presence of only two convolutional layers --- this is typical for early CNNs of that period.
+% \input{graphs/lenet1998.tex}
 
-\input{listings/lenet1998.tex}
+% \noindent 
+% The bold lines in the chart represent the \emph{average} training (red) and validation (blue) AUROC, as measured after performing k-fold cross-validation on 10 folds (\(k = 10\)). The transparent lines indicate the observed training and validation AUROC per each individual fold: this per-fold performance has been charted in order for us to better observe the consistency of model performance per epoch. Variations in performance per fold is due to a combination of different random starting conditions (due to random weight initialisation at the start of a model's training), as well as variances in floating-point calculations.
 
-\noindent
-We implement our version of the LeNet architecture by subclassing \mintinline{python}{tf.keras.Model} class, which is then passed on to our \mintinline{python}{cross_validate()} function to be evaluated. This entire experiment is conducted within a Jupyter notebook which is made available as a self-contained, reproducible unit within the project repository (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/master/python/initial-evaluation/lenet1998.ipynb}{Github}). Running the experiment yields our first AUROC to performance graph:
+% What information does our data for the LeNet model tell us? First, we can observe severe overfitting: by epoch 10, performance on the training set asymptomatically approaches $1.0$ (as quantified by AUROC). However, the validation performance remains minimal: generally averaging around $0.60$, with certain instances of the model performing little better than chance ($0.50$). This information indicates that a classical \enquote*{shallow} CNN lacks the representational power to extract the features necessary to perform classification on our dataset. Indeed, it appears that the LeNet model fails to converge at all. This is to be expected: and our experiment yields a minimal baseline AUROC value of $0.608$ that our subsequent models must beat. Likewise, by demonstrating that classical \enquote*{shallow} CNNs are unable to solve our problem, we make the case for using a \enquote*{deep} neural network: in the form of the InceptionV3 architecture, which we will explore in the following section.
 
-\input{graphs/lenet1998.tex}
 
-\noindent 
-The bold lines in the chart represent the \emph{average} training (red) and validation (blue) AUROC, as measured after performing k-fold cross-validation on 10 folds (\(k = 10\)). The transparent lines indicate the observed training and validation AUROC per each individual fold: this per-fold performance has been charted in order for us to better observe the consistency of model performance per epoch. Variations in performance per fold is due to a combination of different random starting conditions (due to random weight initialisation at the start of a model's training), as well as variances in floating-point calculations.
-
-What information does our data for the LeNet model tell us? First, we can observe severe overfitting: by epoch 10, performance on the training set asymptomatically approaches $1.0$ (as quantified by AUROC). However, the validation performance remains minimal: generally averaging around $0.60$, with certain instances of the model performing little better than chance ($0.50$). This information indicates that a classical \enquote*{shallow} CNN lacks the representational power to extract the features necessary to perform classification on our dataset. Indeed, it appears that the LeNet model fails to converge at all. This is to be expected: and our experiment yields a minimal baseline AUROC value of $0.608$ that our subsequent models must beat. Likewise, by demonstrating that classical \enquote*{shallow} CNNs are unable to solve our problem, we make the case for using a \enquote*{deep} neural network: in the form of the InceptionV3 architecture, which we will explore in the following section.
-
-\subsection{End-to-End Training with InceptionV3}
-
-Having validated the necessity of using a deep convolutional neural network to solve this \emph{multiclass}, \emph{multilabel} classification task, our next question would be: \enquote{is it necessary to use the technique of \emph{transfer-learning} on our dataset, or would a regular end-to-end training process suffice?} Although the small size of our dataset indicates that transfer learning is appropriate, it is important for us to validate our assumptions through empirical data. Hence, we arrive at the establishment of the second baseline model: end-to-end training InceptionV3 on our dataset. Let us start by defining our base model:
+% Having validated the necessity of using a deep convolutional neural network to solve this \emph{multiclass}, \emph{multilabel} classification task, our next question would be: \enquote{is it necessary to use the technique of \emph{transfer-learning} on our dataset, or would a regular end-to-end training process suffice?} Although the small size of our dataset indicates that transfer learning is appropriate, it is important for us to validate our assumptions through empirical data. Hence, we arrive at the establishment of the second baseline model: end-to-end training InceptionV3 on our dataset. 
 
 \input{listings/inceptionv3.tex}
 
@@ -74,22 +61,27 @@ We define a \mintinline{python}{class TransferLearningModel} which will be insta
 \input{graphs/inceptionv3-end2end.tex}
 
 \noindent
+The bold lines in the chart represent the \emph{average} training (red) and validation (blue) AUROC, as measured after performing k-fold cross-validation on 10 folds (\(k = 10\)). The transparent lines indicate the observed training and validation AUROC per each individual fold: this per-fold performance has been charted in order for us to better observe the consistency of model performance per epoch. Variations in performance per fold is due to a combination of different random starting conditions (due to random weight initialisation at the start of a model's training), as well as variances in floating-point calculations.
+
 We can observe that the end-to-end variant performs marginally: achieving an average AUROC of \(0.692\). However, upon a closer examination it is clear that the validation AUROC of each individual k-fold trial is highly erratic. The large spikes in validation AUROC indicates a failure to converge, as the dataset is too small for the number of tunable weights in the model. The InceptionV3 model has 189 layers, with a combined total of 23.9 million trainable weights: representing a parameter space several orders of magnitude larger than our dataset. The highly erratic validation AUROC is only a symptom of the model's inability to converge, and demonstrates clearly that regular end-to-end training is insufficient and inappropriate for our dataset.
 
-\subsection{Baseline Metrics}
+\subsection{Baseline Metrics}\label{sec:baseline-implementation}
 
 Having completed assessing our two baseline models, we are left with the following metrics that will help us in our own evaluation:
 
 \input{tables/baseline-benchmarks.tex}
 
 \noindent
-The first level of performance that our subsequent models are expected to achieve is a validation AUROC \(> 0.50\). As a measurement of classifier performance, an AUROC of \(0.50\) indicates performance no better than chance (i.e. the same as choosing by random). If we are unable to meet the minimum baseline of \(> 0.50\), then our entire approach may be unrealistic and infeasible. The second baseline that we must achieve is a performance of \(> 0.61\). For that is the best performance measured from a classical \enquote*{shallow} CNN. As deep neural networks, with their dozens (if not hundreds) of layers incur a computational cost that is an order of magnitude above classical \enquote*{shallow} CNNs, if our model is not able to exceed the performance of a regular CNN, it will be better to develop a regular CNN instead. Finally, the last baseline that we established allows us to validate the suitability of the transfer-learning technique. If our model is unable to meet an AUROC of \(> 0.69\), then we will be better served to train our model architecture directly on our dataset.
+The first level of performance that our subsequent models are expected to achieve is a validation AUROC \(> 0.50\). As a measurement of classifier performance, an AUROC of \(0.50\) indicates performance no better than chance (i.e. the same as choosing by random). If we are unable to meet the minimum baseline of \(> 0.50\), then our entire approach may be unrealistic and infeasible. 
+% The second baseline that we must achieve is a performance of \(> 0.61\). For that is the best performance measured from a classical \enquote*{shallow} CNN. As deep neural networks, with their dozens (if not hundreds) of layers incur a computational cost that is an order of magnitude above classical \enquote*{shallow} CNNs, if our model is not able to exceed the performance of a regular CNN, it will be better to develop a regular CNN instead.
+% Finally, the last baseline that we established allows us to validate the suitability of the transfer-learning technique. If our model is unable to meet an AUROC of \(> 0.69\), then we will be better served to train our model architecture directly on our dataset.
+Next, the baseline that we established allows us to validate the suitability of the transfer-learning technique. If our model is unable to meet an AUROC of \(> 0.69\), then we will be better served to train our model architecture directly on our dataset.
 
 With this information in hand, it is time for us to embark on the second part of our study: developing a transfer-learning model to infer the RUST score of radiographs of long-bone fractures. In the transfer learning technique, a base model is trained on a larger dataset, before having it's weights frozen, and then used as a component of a classifier trained on the task-specific dataset. A key decision in this process is the choice of the larger dataset that the base model will be trained on. Thus, we are lead to the second part of our study: evaluating the performance of InceptionV3 trained on ImageNet, and RadImageNet.
 
 \section{InceptionV3 with Transfer Learning}
 
-Let us begin by evaluating the performance of the RadImageNet weights. Following the same procedure as we did earlier, we instantiate a InceptionV3 model with our classifier, and set the attribute \mintinline{Python}{self.inceptionv3(weights='radimagenet.h5')} and \mintinline{python}{self.inceptionv3.trainable = False}. This class instance now has InceptionV3 with pre-trained ImageNet weights, which we have frozen. Now when we run the training process, only our classifier will be trained. We conduct the experiment in the following Jupyter notebook (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/8d295305fbf9e8a7d1993e4564731e3f3f113f2d/python/initial-evaluation/inceptionv3-radimgnet.ipynb}{Github}).
+Let us begin by evaluating the performance of the RadImageNet weights (see \autoref{sec:protocol-iii-method}).\footnote{I choose to conduct Protocol III first, due to an idiosyncrasy in the process of loading Tensorflow weights. However despite this switch-up in ordering, the overall method remains the same.} Following the same procedure as we did earlier, we instantiate a InceptionV3 model with our classifier, \& set \mintinline{Python}{self.inceptionv3(weights='radimagenet.h5')} and \mintinline{python}{self.inceptionv3.trainable = False}. This class instance now has InceptionV3 with pre-trained ImageNet weights, which we have frozen. Now when we run the training process, only our classifier will be trained. We conduct the experiment in the following Jupyter notebook (\href{https://github.com/ShenZhouHong/radiography-ai-project/blob/8d295305fbf9e8a7d1993e4564731e3f3f113f2d/python/initial-evaluation/inceptionv3-radimgnet.ipynb}{Github}).
 
 \subsection{Base Model Trained on RadImageNet Dataset}
 
@@ -168,4 +160,4 @@ Thus, we have completed our hyperparameter search. After implementing and runnin
 \input{tables/final-hyperparameters.tex}
 
 \noindent
-The implementation, analysis, and search of our model hyperparameters are now complete. Now we are ready for the final evaluation of the complete model on our hold-out test set. This will be done in the final part of our project, in the Part IV evaluation.
+The implementation, analysis, and search of our model hyperparameters are now complete. Now we are ready for the final evaluation of the complete model on our hold-out test set.

@@ -1,0 +1,43 @@
+\chapter{Results and Discussion}
+
+As per our methodology (see \autoref{sec:final-evaluation-method}), we train a new model using the optimal set of hyperparameters. The following graph presents the training history of our final model:
+
+\input{graphs/final-model.tex}
+
+\noindent
+Using the best-performing model checkpoint at epoch \(14\), we evaluate the final model on our hold-out test set. We obtain the following results:
+
+\input{tables/final-results.tex}
+
+\noindent
+With this final piece of information, we may now turn and look back at the questions and endpoints (see \autoref{sec:final-evaluation-method}), and evaluate how our project turned out.
+
+\section{Does Transfer-Learning Perform Better than End-to-End Training?}
+
+The first question that we defined in our evaluation, was whether transfer-learning as a method is able to perform better than end-to-end training. Machine learning problems in medical imagery is often constrained by the challenge of small datasets, and ours is no exception. With only 3,000 radiographs bearing RUST labels, the very reason that we implement transfer learning is an attempt to mitigate issues that the end-to-end training of a larger model may face. Is our assumption validated? We can answer this question by examining the performance of our end-to-end model in \autoref{sec:baseline-implementation} versus the performance of our final model here. The end-to-end model achieved an AUROC of only \(0.692\), versus the AUROC our final transfer-learning model achieved of \(0.890\). Indeed, even our interim models built without hyperparameter optimisation achieved performances that were higher than the end-to-end baseline.
+
+By examining the training and validation AUROC graphs of the end-to-end training implementation, we can see that the validation AUROC is highly erratic, both per k-fold cross-validation runs, as well as within the epochs of an individual training cycle. Furthermore, the end-to-end trained model overfits severely from the very beginning. These observations are strong indications that that end-to-end training is inappropriate for datasets of our order of magnitude. In contrast, if we look at the training and validation AUROC graphs of our final model, we can see a much smoother curve, and minimal overfitting. Hence, we may conclude that transfer-learning, as a method does perform better than end-to-end training, especially in the application of medical image processing where datasets are relatively small.
+
+\section{Do RadImageNet Weights Perform Better than ImageNet Weights?}
+
+The next question that we can answer, is whether or not RadImageNet weights perform better than ImageNet weights. We must keep in mind that whatever conclusions we can draw are only applicable specifically to our use case of inferring RUST scores from radiographs. In our case, it appeared that the ImageNet weights exhibited a higher level of performance, compared to the RadImageNet weights. This may be due to how the ImageNet dataset is fundamentally larger than the RadImageNet dataset (13 million images versus 5 million). The larger dataset size may have allowed the weights to be better placed to serve as general-purpose feature extractors. However, although the RadImageNet model achieved a lower level of performance overall, it did exhibit significantly less overfitting than the un-tuned ImageNet model. This keeps RadImageNet as an open avenue for additional exploration --- and indeed, if there was more time, it would have been better to perform a hyperparameter search on the RadImageNet model as well, for a more robust comparison.
+
+\section{Is Transfer-Learning Able to Perform Persuasively, in the Task of Predicting RUST Scores?}
+
+Finally, we must ask ourselves: were we able to achieve the overarching goal of developing an AI model that is able to predict the RUST score of a fracture from a pair of radiographs? In our methodology, we explicitly defined a performance target of an AUROC of \(0.80\) or above. Our model, when evaluated on the hold-out test set, was able to achieve an AUROC of \(0.890\). Does this mean we achieved our goal?
+
+One one hand, the AUROC of \(0.890\) is a strong result, approaching the same percentile as the other studies that we reviewed in our background research. Recall that the 2017 \autocite{MURA2017} study, which utilised a significantly larger dataset, was able to achieve an AUROC of \(0.921\). Likewise, the Lindsey et al.\ study utilising 31,490 radiographs achieved a AUROC of \(0.967\). \autocite{Lindsey2018} For a project utilising a data set containing only around 3,000 radiographs, an AUROC of \(0.890\) is certainly persuasive --- at least as a proof of method.
+
+However, the AUROC value is not the only metric that we must consider, when evaluating a model's performance. The model's precision and recall must also be evaluated, and although we achieved a precision of \(0.880\), our recall is only \(0.409\). This significantly weakens our results, insofar that it indicates that the true positive rate of our model is much lower than the AUROC would lead one to expect. Why is the recall so low, when compared to the Precision? One reason why this might be the case, may be due to the highly imbalanced nature of our dataset's class distribution. As a \emph{multi-class}, \emph{multi-label} classification problem, our model must essentially tag a radiograph with the right set of cortex scores. However, the distribution of scores cannot be assumed as even --- indeed, the dataset contains many more instances of non-union (i.e. non-healing fractures), than remodelled fractures. A low recall can be a symptom which indicates poor performance on a highly class-imbalanced dataset.
+
+Hence, when considering both the precision and recall of our model, the ultimate performance still offers further room for improvement. This is not a bad conclusion to draw --- since ultimately, the goal of this project is to validate the use of transfer-learning on a small dataset, demonstrate the feasibility of achieving results even with a difficult multi-class, multi-label problem, and ultimately offer the possibility for further inquiry --- into the goal of building more advanced AI models that can characterise fractures using established clinical instruments.
+
+\section{Limitations and Further Works}
+
+Ultimately, it is important to stress that despite achieving an AUROC of \(0.890\), the model that we built in this study is still very far from a diagnostic or even research tool --- particularly due to it's low recall. But instead, the results that we achieved should offer a path towards further questions and avenues of additional exploration. Some of these further works may include:
+
+Is it possible to change the performance metric of the model from AUROC, to another metric that will allow us to maximise both precision \emph{and} recall? One possible method that the author considered, but did not ultimately pursue, was the use of the F1 harmonic mean as the performance metric. The F1 harmonic mean is derived from the precision and the recall, and may potentially allow the training of a more robust model. Ultimately, the reason that this method was not attempted in the study, was because the F1 harmonic mean is not a differentiable function, hence gradient descent via backpropagation does not work for it. However, there exists alternative functions such as the \mintinline{python}{F1SoftMax()} which implement differentiable approximations to the F1 harmonic. This remains an intriguing direction for further inquiry.
+
+Likewise, one of the decisions that we made was to develop one model for both anterioposterior and lateral views. This allows us to avoid bifurcating our limited dataset, but in retrospect it may be a decision that deserves further examination. Would an ensemble model, composed of two different neural networks, potentially avoid some of the issues the current project experienced with low recall? How would the RUST labels be encoded, in the context of an ensemble model? These questions remain to be answered.
+
+Finally, further work can certainly be done in the domain of hyperparameter optimisation. In this study, we implemented a basic random search, followed by a grid search. But given the provisioning of more compute resources, alternative methods like genetic algorithms may prove vastly superior to our current hyperparameter regimes. Likewise, the provisioning of further compute could allow us to optimise hyperparameters on both the RadImageNet model as well as the ImageNet model, potentially resulting in a fairer evaluation for both.
